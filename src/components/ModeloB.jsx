@@ -218,6 +218,7 @@ for (const line of observacionesLines) {
 
   const handleGeneratePDF = async () => {
     const doc = new jsPDF();
+    
     // Crear instancia de jsPDF
 
     doc.addFont("times", "normal", "WinAnsiEncoding");
@@ -286,18 +287,22 @@ for (const line of observacionesLines) {
       110,
       { align: "center" }
     );
-
+    
     if (formValues.fecha2) {
-      const formattedFecha = new Date(formValues.fecha2 + 'T00:00:00Z').toLocaleDateString('es-ES', {
-        day: '2-digit',
-        month: 'long',
-        timeZone: 'UTC',
-      });
-  
-      doc.setFontSize(12);
-      doc.setFont("times", "normal");
-      doc.text(`FECHA: ${formattedFecha}`, 20, 120);
-    }
+    const formattedFecha = new Date(formValues.fecha2 + 'T00:00:00Z').toLocaleDateString('es-ES', {
+      day: '2-digit',
+      month: 'long',
+      timeZone: 'UTC',
+    });
+
+    doc.setFontSize(12);
+    doc.setFont("times", "normal");
+    doc.text(`FECHA: ${formattedFecha}`, 20, 120);
+  }else{
+    doc.setFontSize(12);
+  doc.setFont("times", "normal");
+  doc.text("FECHA: ", 20, 120);
+  }
 
     doc.setFontSize(12);
     doc.setFont("times", "normal");
@@ -311,36 +316,83 @@ for (const line of observacionesLines) {
     doc.setFont("times", "normal");
     doc.text(`REMITIDO POR: ${formValues.remitido2}`, 20, 140);
 
+    // Define the maximum width for the ASUNTO field
+const maxAsuntoWidth = 180;
+
+// Split the content of the ASUNTO field into lines
+const asuntoLines = doc.splitTextToSize(formValues.asunto2, maxAsuntoWidth);
+// Añadir el campo "Documento" en el PDF
+doc.setFontSize(12);
+doc.setFont("times", "normal");
+doc.text(`ASUNTO: `, 20, 150);
+
+
+// Calculate the height needed for the ASUNTO field
+const asuntoHeight = asuntoLines.length * 5; // Multiplying by 5 for line spacing
+
+// Initial Y-coordinate for the ASUNTO field
+let asuntoY = 150;
+
+// Add the ASUNTO field in the PDF
+doc.setFontSize(12);
+doc.setFont("times", "normal");
+
+// Loop through the ASUNTO lines and add them to the PDF
+for (let line of asuntoLines) {
+  // Check if adding this line will exceed the page height
+  if (asuntoY + 5 > doc.internal.pageSize.height - 20) {
+    // Create a new page
+    doc.addPage();
+    asuntoY = 20; // Reset Y-coordinate to start at the top of the new page
+  }
+
+  doc.text(line, 40, asuntoY);
+  asuntoY += 5; // Increase Y-coordinate for the next line
+}
+
+    
     doc.setFontSize(12);
-    doc.setFont("times", "normal");
-    doc.text(`ASUNTO: ${formValues.asunto2}`, 20, 150);
+    doc.setFont("times", "bold");
+    doc.text("PASE AL CONSEJO UNIVERSITARIO PARA SU TRATAMIENTO.", 20, asuntoY+10);
 
     doc.setFontSize(12);
     doc.setFont("times", "bold");
-    doc.text("PASE AL CONSEJO UNIVERSITARIO PARA SU TRATAMIENTO.", 20, 160);
+    doc.text("OBSERVACIONES:", 20, asuntoY+15);
 
-    doc.setFontSize(12);
-    doc.setFont("times", "bold");
-    doc.text("OBSERVACIONES:", 20, 170);
+   // Split the observaciones text into lines
+const maxObservacionesWidth = 160; // Maximum width for observaciones text
+const observacionesLines = doc.splitTextToSize(formValues.observaciones2, maxObservacionesWidth);
 
-    doc.setFontSize(12);
-    doc.setFont("times", "normal");
-    doc.text(`${formValues.observaciones2}`, 20, 175);
+// Initial Y-coordinate for the observaciones text
+let observacionesY = asuntoY + 20;
 
-    doc.setLineWidth(0.5);
-    doc.line(20, 176, 190, 176);
+// Draw each line of observaciones with a line separator
+doc.setFontSize(12);
+doc.setFont("times", "normal");
+for (const line of observacionesLines) {
+  doc.text(line, 20, observacionesY);
+  observacionesY += 1; // Adjust the spacing as needed
 
-    doc.setFontSize(6);
+  // Draw a line separator
+  doc.setLineWidth(0.2);
+  doc.line(20, observacionesY, 180, observacionesY);
+  observacionesY += 5; // Adjust the spacing between lines and the line separator
+}
+
+   // doc.setLineWidth(0.5);
+    //doc.line(20, 176, 190, asuntoY+21);
+
+   /* doc.setFontSize(6);
     doc.setFont("times", "normal");
     doc.text("cc.", 15, 270);
     if (formValues.cc2) {
-      doc.text(`- ${formValues.cc2}`, 15, 272);
-      doc.text(`-Archivo`, 15, 274);
-      doc.text("LVAT/nmgf", 15, 276);
+      doc.text(`- ${formValues.cc2}`, 15, asuntoY+27);
+      doc.text(`-Archivo`, 15, asuntoY+29);
+      doc.text("LVAT/nmgf", 15, asuntoY+31);
     } else {
-      doc.text(`-Archivo`, 15, 272);
-      doc.text("LVAT/nmgf", 15, 274);
-    }
+      doc.text(`-Archivo`, 15, asuntoY+27);
+      doc.text("LVAT/nmgf", 15, asuntoY+29);
+    }*/
 
     const imgeData = firma;
 
