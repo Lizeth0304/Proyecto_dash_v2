@@ -182,7 +182,7 @@ doc.setFontSize(12);
 doc.setFont("times", "normal");
 for (const line of observacionesLines) {
   doc.text(line, 20, observacionesY);
-  observacionesY += 10; // Adjust the spacing as needed
+  observacionesY += 1; // Adjust the spacing as needed
 
   // Draw a line separator
   doc.setLineWidth(0.2);
@@ -190,10 +190,10 @@ for (const line of observacionesLines) {
   observacionesY += 5; // Adjust the spacing between lines and the line separator
 }
 
-    doc.setLineWidth(0.5);
-    doc.line(20, 176, 190, asuntoY+21);
+   // doc.setLineWidth(0.5);
+    //doc.line(20, 176, 190, asuntoY+21);
 
-    doc.setFontSize(6);
+   /* doc.setFontSize(6);
     doc.setFont("times", "normal");
     doc.text("cc.", 15, 270);
     if (formValues.cc2) {
@@ -203,7 +203,7 @@ for (const line of observacionesLines) {
     } else {
       doc.text(`-Archivo`, 15, asuntoY+27);
       doc.text("LVAT/nmgf", 15, asuntoY+29);
-    }
+    }*/
 
     const imgeData = firma;
 
