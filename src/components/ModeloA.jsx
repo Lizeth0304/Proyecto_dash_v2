@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { jsPDF } from "jspdf/dist/jspdf.umd.min.js";
 import VisualizadorPDF from "./VisualizadorPDF";
-import firma from "./firma_rectora.png";
+import firma from "./firma_rector_vladimiro.png";
 import { PDFDocument } from "pdf-lib";
 
 const ModeloA = () => {
