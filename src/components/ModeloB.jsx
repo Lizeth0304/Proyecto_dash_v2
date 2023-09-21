@@ -350,9 +350,12 @@ for (let line of asuntoLines) {
     doc.setFont("times", "bold");
     doc.text("OBSERVACIONES:", 20, asuntoY+15);
 
-   // Split the observaciones text into lines
+// Split the observaciones text into lines
 const maxObservacionesWidth = 160; // Maximum width for observaciones text
 const observacionesLines = doc.splitTextToSize(formValues.observaciones2, maxObservacionesWidth);
+
+// Calculate the total height of observaciones text
+const observacionesHeight = observacionesLines.length * 5; // Assuming a font size of 12 and 1 unit spacing between lines
 
 // Initial Y-coordinate for the observaciones text
 let observacionesY = asuntoY + 20;
@@ -370,24 +373,12 @@ for (const line of observacionesLines) {
   observacionesY += 5; // Adjust the spacing between lines and the line separator
 }
 
-   // doc.setLineWidth(0.5);
-    //doc.line(20, 176, 190, asuntoY+21);
+// Calculate the new Y-coordinate for the firma image
+const firmaY = observacionesY + observacionesHeight; // Adjust the spacing as needed
 
-   /* doc.setFontSize(6);
-    doc.setFont("times", "normal");
-    doc.text("cc.", 15, 270);
-    if (formValues.cc2) {
-      doc.text(`- ${formValues.cc2}`, 15, asuntoY+27);
-      doc.text(`-Archivo`, 15, asuntoY+29);
-      doc.text("LVAT/nmgf", 15, asuntoY+31);
-    } else {
-      doc.text(`-Archivo`, 15, asuntoY+27);
-      doc.text("LVAT/nmgf", 15, asuntoY+29);
-    }*/
-
-    const imgeData = firma;
-
-    doc.addImage(imgeData, "PNG", 100, 200, 60, 30, { align: "center" });
+// Add the firma image at the new Y-coordinate
+const imgeData = firma;
+doc.addImage(imgeData, "PNG", 100, firmaY, 60, 30, { align: "center" });
     const pdfBlob1 = doc.output("blob");
     
     const pdfDoc1 = await PDFDocument.load(await pdfBlob1.arrayBuffer());
