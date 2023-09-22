@@ -88,6 +88,8 @@ const ModeloA = () => {
     // Agrega aquí todos los inputs que necesites
   });
 
+  const [showCustomFacultad, setShowCustomFacultad] = useState(false);
+
   const [outputUrl, setOutputUrl] = useState("");
 
   const [pdfFile, setPdfFile] = useState(null);
@@ -101,11 +103,18 @@ const ModeloA = () => {
   const handleInputChange = (event) => {
     const { name, value, type, checked } = event.target;
     const inputValue = type === "checkbox" ? checked : value;
+    
+    if (name === "ciencias2") {
+      // Si el usuario selecciona "Otro", muestra el campo de texto personalizado.
+      setShowCustomFacultad(value === "Otro");
+    }
+  
     setFormValues((prevFormValues) => ({
       ...prevFormValues,
       [name]: inputValue,
     }));
   };
+  
 
   const generatePDF = () => {
     const doc = new jsPDF();
@@ -245,8 +254,8 @@ const ModeloA = () => {
       docZ2 += 5;
       //doc.line(53, docZ2, 192, docZ2);
     }
-
-    const docLines3 = doc.splitTextToSize(formValues.asunto, maxDocWidth);
+    const maxDocWidthAsunto = 155;
+    const docLines3 = doc.splitTextToSize(formValues.asunto, maxDocWidthAsunto);
         
     // Añadir el campo "Documento" en el PDF
     doc.setFontSize(12);
@@ -766,7 +775,8 @@ for (let line of docLines2) {
   //doc.line(53, docZ2, 192, docZ2);
 }
 
-const docLines3 = doc.splitTextToSize(formValues.asunto, maxDocWidth);
+const maxDocWidthAsunto = 155;
+const docLines3 = doc.splitTextToSize(formValues.asunto, maxDocWidthAsunto);
     
 // Añadir el campo "Documento" en el PDF
 doc.setFontSize(12);
@@ -1448,13 +1458,13 @@ doc.addImage(imgeData, "PNG", 70, observacionesY, 60, 30, { align: "center" });
   required
 >
   <option value="">Selecciona una facultad</option>
-  <option value="Facultad de Agropecuaria y Nutrición">Facultad de Agropecuaria y Nutrición</option>
-  <option value="Facultad de Ciencias">Facultad de Ciencias</option>
-  <option value="Facultad de Ciencias Empresariales">Facultad de Ciencias Empresariales</option>
-  <option value="Facultad de Ciencias Sociales y Humanidades">Facultad de Ciencias Sociales y Humanidades</option>
-  <option value="Facultad de Educación Inicial">Facultad de Educación Inicial</option>
-  <option value="Facultad de Pedagogía">Facultad de Pedagogía</option>
-  <option value="Facultad de Tecnología">Facultad de Tecnología</option>
+  <option value=" de Agropecuaria y Nutrición"> de Agropecuaria y Nutrición</option>
+  <option value=" de Ciencias"> de Ciencias</option>
+  <option value=" de Ciencias Empresariales"> de Ciencias Empresariales</option>
+  <option value=" de Ciencias Sociales y Humanidades"> de Ciencias Sociales y Humanidades</option>
+  <option value=" de Educación Inicial"> de Educación Inicial</option>
+  <option value=" de Pedagogía y Cultura Física"> de Pedagogía y Cultura Física</option>
+  <option value=" de Tecnología"> de Tecnología</option>
   {/* Agrega más opciones según sea necesario */}
 </select>
 
