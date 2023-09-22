@@ -565,13 +565,13 @@ for (let i = 0; i < docLines7.length; i++) {
 // OBSERVACIONES
 doc.setFontSize(12);
 doc.setFont("times", "bold");
-doc.text("OBSERVACIONES:", 15, docY7+2);
+doc.text("OBSERVACIONES:", 15, docY7+15);
 const maxObservacionesWidth = 177;
 // Split the observaciones text into lines
 const observacionesLines = doc.splitTextToSize(formValues.observaciones, maxObservacionesWidth);
 
 // Initial Y-coordinate for the observaciones text
-let observacionesY = docY7+8;
+let observacionesY = docY7+20;
 
 // Dibujar cada línea del observaciones text
 for (const line of observacionesLines) {
@@ -1086,13 +1086,13 @@ doc.text(
 // OBSERVACIONES
 doc.setFontSize(12);
 doc.setFont("times", "bold");
-doc.text("OBSERVACIONES:", 15, docY7+2);
+doc.text("OBSERVACIONES:", 15, docY7+15);
 const maxObservacionesWidth = 177;
 // Split the observaciones text into lines
 const observacionesLines = doc.splitTextToSize(formValues.observaciones, maxObservacionesWidth);
 
 // Initial Y-coordinate for the observaciones text
-let observacionesY = docY7+8;
+let observacionesY = docY7+20;
 
 // Dibujar cada línea del observaciones text
 for (const line of observacionesLines) {
