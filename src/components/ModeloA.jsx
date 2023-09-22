@@ -40,6 +40,10 @@ const ModeloA = () => {
     observaciones: "",
     cc: "",
     cc2: "",
+    cc3: "",
+    cc4: "",
+    cc5: "",
+    cc6: "",
     // Agrega aquí todos los inputs que necesites
   };
   const [formValues, setFormValues] = useState({
@@ -77,6 +81,10 @@ const ModeloA = () => {
     observaciones: "",
     cc: "",
     cc2: "",
+    cc3: "",
+    cc4: "",
+    cc5: "",
+    cc6: "",
     // Agrega aquí todos los inputs que necesites
   });
 
@@ -188,13 +196,14 @@ const ModeloA = () => {
     // Añadir el campo "Documento" en el PDF
     doc.setFontSize(12);
     doc.setFont("times", "normal");
-    doc.text(`DOCUMENTO:`, 20, 80);
+    doc.text(`DOCUMENTO: ${formValues.documento}`, 20, 80);
 
     // Definir la posición inicial para el campo "Documento"
     let docY = 80;
     let docZ = 76;
 
-    // Dibujar cada línea del campo "Documento"
+    
+   /* // Dibujar cada línea del campo "Documento"
     for (let line of docLines) {
       doc.text(line, 50, docY);
       doc.setLineWidth(0.2);
@@ -202,7 +211,7 @@ const ModeloA = () => {
       // Aumentar la posición para la siguiente línea
       docZ += 5;
       doc.line(50, docZ, 192, docZ);
-    }
+    }*/
 
     // Verificar si el campo "Documento" ocupó más de una línea
     if (docHeight > 5) {
@@ -223,18 +232,18 @@ const ModeloA = () => {
     // Añadir el campo "Documento" en el PDF
     doc.setFontSize(12);
     doc.setFont("times", "normal");
-    doc.text(`REMITIDO POR: `, 20, 98);
+    doc.text(`REMITIDO POR:`, 20, 90);
     // Definir la posición inicial para el campo "Documento"
-    let docY2 = 98;
+    let docY2 = 90;
     let docZ2 = 94;
 
     // Dibujar cada línea del campo "Documento"
     for (let line of docLines2) {
       doc.text(line, 53, docY2);
-      doc.setLineWidth(0.2);
+      //doc.setLineWidth(0.2);
       docY2 += 5; // Aumentar la posición para la siguiente línea
       docZ2 += 5;
-      doc.line(53, docZ2, 192, docZ2);
+      //doc.line(53, docZ2, 192, docZ2);
     }
 
     const docLines3 = doc.splitTextToSize(formValues.asunto, maxDocWidth);
@@ -242,32 +251,35 @@ const ModeloA = () => {
     // Añadir el campo "Documento" en el PDF
     doc.setFontSize(12);
     doc.setFont("times", "normal");
-    doc.text(`ASUNTO: `, 20, 112);
+    doc.text(`ASUNTO:`, 20, docY2+2);
     // Definir la posición inicial para el campo "Documento"
-    let docY3 = 112;
+    let docY3 = docY2+2;
     let docZ3 = 108;
 
 
     // Dibujar cada línea del campo "Documento"
     for (let line of docLines3) {
       doc.text(line, 40, docY3);
-      doc.setLineWidth(0.2);
+      //doc.setLineWidth(0.2);
       docY3 += 5; // Aumentar la posición para la siguiente línea
       docZ3 += 5;
-      doc.line(40, docZ3, 192, docZ3);
+      //doc.line(40, docZ3, 192, docZ3);
     }
+
+
+
     // Calculate the height needed for the ASUNTO field
     const asuntoHeight = docLines3.length * 5; // Multiplying by 5 for line spacing
 
     // Initial Y-coordinate for the "PASE A" section
-    let paseAY = 115 + asuntoHeight; // Add some spacing
+    let paseAY = docY3; // Add some spacing
 
 
 
     //PASE A:
     doc.setFontSize(12);
     doc.setFont("times", "bold");
-    doc.text("PASE A:", 20, paseAY);
+    doc.text("PASE A:", 20, paseAY+5);
 
     doc.setFontSize(12);
     doc.setFont("times", "normal");
@@ -307,120 +319,159 @@ const ModeloA = () => {
       paseAY+30
     );
 
-    //Esta parte es la del Facultad y agregar
-    const maxDocWidth2 = 57;
-    // Dividir el contenido del campo "Documento" en líneas
-    const docLines4 = doc.splitTextToSize(formValues.ciencias2, maxDocWidth2);
+    // Esta parte es la del Facultad y agregar
+const maxDocWidth2 = 57;
+const maxLinesFacultad = 4; // Puedes ajustar este número según tus necesidades
 
-    // Añadir el campo "Documento" en el PDF
-    doc.setFontSize(12);
-    doc.setFont("times", "normal");
-    doc.text(`${formValues.ciencias ? "(X)" : "(   )"}  Facultad `, 20, paseAY+35);
-    // Definir la posición inicial para el campo "Documento"
-    let docY4 = paseAY+35;
-    let docZ4 = paseAY+30;
+// Dividir el contenido del campo "Documento" en líneas
+const docLines4 = doc.splitTextToSize(formValues.ciencias2, maxDocWidth2);
 
-    // Dibujar cada línea del campo "Documento"
-    for (let i = 0; i < docLines4.length; i++) {
-      const line = docLines4[i];
-      if (i === 0) {
-        doc.text(line, 44, docY4);
-        docZ4 += 5;
-        doc.line(44, docZ4, 100, docZ4);
-      } else {
-        doc.text(line, 28, docY4);
-        docZ4 += 5;
-        doc.line(28, docZ4, 100, docZ4);
-      }
-      doc.setLineWidth(0.2);
-      docY4 += 5; // Aumentar la posición para la siguiente línea
+// Añadir el campo "Documento" en el PDF
+doc.setFontSize(12);
+doc.setFont("times", "normal");
+doc.text(`${formValues.ciencias ? "(X)" : "(   )"}  Facultad `, 20, paseAY + 35);
+// Definir la posición inicial para el campo "Documento"
+let docY4 = paseAY + 35;
+let docZ4 = paseAY + 30;
+
+// Dibujar cada línea del campo "Documento"
+for (let i = 0; i < docLines4.length; i++) {
+  const line = docLines4[i];
+  if (i === 0) {
+    doc.text(line, 44, docY4);
+    docZ4 += 5;
+    doc.line(44, docZ4, 100, docZ4);
+  } else {
+    if (i < maxLinesFacultad) {
+      doc.text(line, 44, docY4);
+      docZ4 += 5;
+      doc.line(44, docZ4, 100, docZ4);
+    } else {
+      // Agregar más espacio para el texto si se excede de 2 líneas
+      doc.text(line, 44, docY4 + (i - maxLinesFacultad) * 5);
+      docZ4 += 5;
     }
+  }
+  doc.setLineWidth(0.2);
+  docY4 += 5; // Aumentar la posición para la siguiente línea
+}
 
-    // Dividir el contenido del campo "Documento" en líneas
-    const docLines5 = doc.splitTextToSize(formValues.direccion2, maxDocWidth2);
+ // Esta parte es para "Dirección"
+const maxDocWidth3 = 57;
+const maxLinesDireccion = 4; // Puedes ajustar este número según tus necesidades
 
-    // Añadir el campo "Documento" en el PDF
-    doc.setFontSize(12);
-    doc.setFont("times", "normal");
-    doc.text(`${formValues.direccion ? "(X)" : "(   )"}  Dirección `, 20, paseAY+40);
-    // Definir la posición inicial para el campo "Documento"
-    let docY5 = paseAY+40;
-    let docZ5 = paseAY+35;
+// Dividir el contenido del campo "Dirección" en líneas
+const docLines5 = doc.splitTextToSize(formValues.direccion2, maxDocWidth3);
 
-    // Dibujar cada línea del campo "Documento"
-    for (let i = 0; i < docLines5.length; i++) {
-      const line = docLines5[i];
-      if (i === 0) {
-        doc.text(line, 46, docY5);
-        docZ5 += 5;
-        doc.line(46, docZ5, 100, docZ5);
-      } else {
-        doc.text(line, 28, docY5);
-        docZ5 += 5;
-        doc.line(28, docZ5, 100, docZ5);
-      }
-      doc.setLineWidth(0.2);
-      docY5 += 5; // Aumentar la posición para la siguiente línea
+// Añadir el campo "Dirección" en el PDF
+doc.setFontSize(12);
+doc.setFont("times", "normal");
+doc.text(`${formValues.direccion ? "(X)" : "(   )"}  Dirección `, 20, docY4);
+// Definir la posición inicial para el campo "Dirección"
+let docY5 = docY4;
+let docZ5 = docY4-5;
+
+// Dibujar cada línea del campo "Dirección"
+for (let i = 0; i < docLines5.length; i++) {
+  const line = docLines5[i];
+  if (i === 0) {
+    doc.text(line, 46, docY5);
+    docZ5 += 5;
+    doc.line(46, docZ5, 100, docZ5);
+  } else {
+    if (i < maxLinesDireccion) {
+      doc.text(line, 46, docY5);
+      docZ5 += 5;
+      doc.line(46, docZ5, 100, docZ5);
+    } else {
+      // Agregar más espacio para el texto si se excede de 2 líneas
+      doc.text(line, 46, docY5 + (i - maxLinesDireccion) * 5);
+      docZ5 += 5;
     }
+  }
+  doc.setLineWidth(0.2);
+  docY5 += 5; // Aumentar la posición para la siguiente línea
+}
 
-    // Dividir el contenido del campo "Documento" en líneas
-    const docLines6 = doc.splitTextToSize(formValues.oficina2, maxDocWidth2);
+// Repetir el mismo enfoque para los campos "Oficina" y "Otro"
+// Esta parte es para "Oficina"
+const maxDocWidth4 = 57;
+const maxLinesOficina = 4; // Puedes ajustar este número según tus necesidades
 
-    // Añadir el campo "Documento" en el PDF
-    doc.setFontSize(12);
-    doc.setFont("times", "normal");
-    doc.text(`${formValues.oficina ? "(X)" : "(   )"}  Oficina `, 20, paseAY+45);
-    // Definir la posición inicial para el campo "Documento"
-    let docY6 = paseAY+45;
-    let docZ6 = paseAY+40;
+// Dividir el contenido del campo "Oficina" en líneas
+const docLines6 = doc.splitTextToSize(formValues.oficina2, maxDocWidth4);
 
-    // Dibujar cada línea del campo "Documento"
-    for (let i = 0; i < docLines6.length; i++) {
-      const line = docLines6[i];
-      if (i === 0) {
-        doc.text(line, 43, docY6);
-        docZ6 += 5;
-        doc.line(43, docZ6, 100, docZ6);
-      } else {
-        doc.text(line, 28, docY6);
-        docZ6 += 5;
-        doc.line(28, docZ6, 100, docZ6);
-      }
-      doc.setLineWidth(0.2);
-      docY6 += 5; // Aumentar la posición para la siguiente línea
+// Añadir el campo "Oficina" en el PDF
+doc.setFontSize(12);
+doc.setFont("times", "normal");
+doc.text(`${formValues.oficina ? "(X)" : "(   )"}  Oficina `, 20, docY5);
+// Definir la posición inicial para el campo "Oficina"
+let docY6 = docY5;
+let docZ6 = docY5-5;
+
+// Dibujar cada línea del campo "Oficina"
+for (let i = 0; i < docLines6.length; i++) {
+  const line = docLines6[i];
+  if (i === 0) {
+    doc.text(line, 43, docY6);
+    docZ6 += 5;
+    doc.line(43, docZ6, 100, docZ6);
+  } else {
+    if (i < maxLinesOficina) {
+      doc.text(line, 43, docY6);
+      docZ6 += 5;
+      doc.line(43, docZ6, 100, docZ6);
+    } else {
+      // Agregar más espacio para el texto si se excede de 2 líneas
+      doc.text(line, 43, docY6 + (i - maxLinesOficina) * 5);
+      docZ6 += 5;
     }
+  }
+  doc.setLineWidth(0.2);
+  docY6 += 5; // Aumentar la posición para la siguiente línea
+}
 
-    // Dividir el contenido del campo "Documento" en líneas
-    const docLines7 = doc.splitTextToSize(formValues.otro2, maxDocWidth2);
+// Esta parte es para "Otro"
+const maxDocWidth5 = 57;
+const maxLinesOtro = 4; // Puedes ajustar este número según tus necesidades
 
-    // Añadir el campo "Documento" en el PDF
-    doc.setFontSize(12);
-    doc.setFont("times", "normal");
-    doc.text(`${formValues.otro ? "(X)" : "(   )"}  Otro `, 20, paseAY+50);
-    // Definir la posición inicial para el campo "Documento"
-    let docY7 = paseAY+50;
-    let docZ7 = paseAY+45;;
+// Dividir el contenido del campo "Otro" en líneas
+const docLines7 = doc.splitTextToSize(formValues.otro2, maxDocWidth5);
 
-    // Dibujar cada línea del campo "Documento"
-    for (let i = 0; i < docLines7.length; i++) {
-      const line = docLines7[i];
-      if (i === 0) {
-        doc.text(line, 38, docY7);
-        docZ7 += 5;
-        doc.line(38, docZ7, 100, docZ7);
-      } else {
-        doc.text(line, 28, docY7);
-        docZ7 += 5;
-        doc.line(28, docZ7, 100, docZ7);
-      }
-      doc.setLineWidth(0.2);
-      docY7 += 5; // Aumentar la posición para la siguiente línea
+// Añadir el campo "Otro" en el PDF
+doc.setFontSize(12);
+doc.setFont("times", "normal");
+doc.text(`${formValues.otro ? "(X)" : "(   )"}  Otro `, 20, docY6);
+// Definir la posición inicial para el campo "Otro"
+let docY7 = docY6;
+let docZ7 = docY6-5;
+
+// Dibujar cada línea del campo "Otro"
+for (let i = 0; i < docLines7.length; i++) {
+  const line = docLines7[i];
+  if (i === 0) {
+    doc.text(line, 38, docY7);
+    docZ7 += 5;
+    doc.line(38, docZ7, 100, docZ7);
+  } else {
+    if (i < maxLinesOtro) {
+      doc.text(line, 38, docY7);
+      docZ7 += 5;
+      doc.line(38, docZ7, 100, docZ7);
+    } else {
+      // Agregar más espacio para el texto si se excede de 2 líneas
+      doc.text(line, 38, docY7 + (i - maxLinesOtro) * 5);
+      docZ7 += 5;
     }
+  }
+  doc.setLineWidth(0.2);
+  docY7 += 5; // Aumentar la posición para la siguiente línea
+}
 
     //PARA:
     doc.setFontSize(12);
     doc.setFont("times", "bold");
-    doc.text("PARA:", 110, paseAY);
+    doc.text("PARA:", 110, paseAY+5);
 
     doc.setFontSize(12);
     doc.setFont("times", "normal");
@@ -505,13 +556,13 @@ const ModeloA = () => {
 // OBSERVACIONES
 doc.setFontSize(12);
 doc.setFont("times", "bold");
-doc.text("OBSERVACIONES:", 15, paseAY + 65);
+doc.text("OBSERVACIONES:", 15, docY7+2);
 const maxObservacionesWidth = 177;
 // Split the observaciones text into lines
 const observacionesLines = doc.splitTextToSize(formValues.observaciones, maxObservacionesWidth);
 
 // Initial Y-coordinate for the observaciones text
-let observacionesY = paseAY + 70;
+let observacionesY = docY7+8;
 
 // Dibujar cada línea del observaciones text
 for (const line of observacionesLines) {
@@ -521,27 +572,52 @@ for (const line of observacionesLines) {
 
   // Draw a line after each line of observaciones
   doc.setLineWidth(0.2);
-  doc.line(15, observacionesY + 1, 192, observacionesY + 1);
+  //doc.line(15, observacionesY + 1, 192, observacionesY + 1);
 
   // Increase the Y-coordinate for the next line
   observacionesY += 5; // Adjust the spacing as needed
 }
     
 
-  /*  doc.setFontSize(6);
-    doc.setFont("times", "normal");
-    doc.text("cc.", 15, 270);
-    if (formValues.cc2) {
-      doc.text(`- ${formValues.cc2}`, 15, 272);
-      doc.text(`-Archivo`, 15, 274);
-      doc.text("LVAT/nmgf", 15, 276);
-    } else {
-      doc.text(`-Archivo`, 15, 272);
-      doc.text("LVAT/nmgf", 15, 274);
-    }*/
+doc.setFontSize(6);
+doc.setFont("times", "normal");
+
+let yPosition = 270; // Posición vertical inicial
+let hasCC = false; // Variable para verificar si hay al menos un campo cc
+doc.text("cc.", 15, 268);
+// Verificar y agregar campos cc
+if (formValues.cc2) {
+  doc.text(`- ${formValues.cc2}`, 15, yPosition);
+  yPosition += 2; // Añadir un espacio adicional
+  hasCC = true; // Indicar que hay al menos un campo cc
+}
+
+if (formValues.cc4) {
+  doc.text(`- ${formValues.cc4}`, 15, yPosition);
+  yPosition += 2; // Añadir otro espacio adicional
+  hasCC = true; // Indicar que hay al menos un campo cc
+}
+
+if (formValues.cc6) {
+  doc.text(`- ${formValues.cc6}`, 15, yPosition);
+  yPosition += 2; // Añadir otro espacio adicional
+  hasCC = true; // Indicar que hay al menos un campo cc
+}
+
+// Agregar un guion solo si no hay campos cc
+if (!hasCC) {
+  doc.text("- ", 15, yPosition);
+  yPosition += 2; // Añadir un espacio adicional
+}
+
+doc.text("- Archivo", 15, yPosition);
+doc.text("LVAT/nmgf", 15, yPosition + 2); // Agregar espacio después de "Archivo"
+
+
+
     const imgeData = firma;
 
-    doc.addImage(imgeData, "PNG", 70, 230, 60, 30, { align: "center" });
+    doc.addImage(imgeData, "PNG", 70, observacionesY, 60, 30, { align: "center" });
 
     // Guardar el PDF
     // doc.save("ModeloA.pdf");
@@ -555,7 +631,7 @@ for (const line of observacionesLines) {
     const doc = new jsPDF();
   
       // Crear instancia de jsPDF
-  
+
       doc.addFont("times", "normal", "WinAnsiEncoding");
       // Definir el estilo de fuente
       doc.setFont("times", "bold");
@@ -640,13 +716,14 @@ for (const line of observacionesLines) {
       // Añadir el campo "Documento" en el PDF
       doc.setFontSize(12);
       doc.setFont("times", "normal");
-      doc.text(`DOCUMENTO:`, 20, 80);
+      doc.text(`DOCUMENTO: ${formValues.documento}`, 20, 80);
   
       // Definir la posición inicial para el campo "Documento"
       let docY = 80;
       let docZ = 76;
   
-      // Dibujar cada línea del campo "Documento"
+      
+     /* // Dibujar cada línea del campo "Documento"
       for (let line of docLines) {
         doc.text(line, 50, docY);
         doc.setLineWidth(0.2);
@@ -654,7 +731,7 @@ for (const line of observacionesLines) {
         // Aumentar la posición para la siguiente línea
         docZ += 5;
         doc.line(50, docZ, 192, docZ);
-      }
+      }*/
   
       // Verificar si el campo "Documento" ocupó más de una línea
       if (docHeight > 5) {
@@ -675,18 +752,18 @@ for (const line of observacionesLines) {
       // Añadir el campo "Documento" en el PDF
       doc.setFontSize(12);
       doc.setFont("times", "normal");
-      doc.text(`REMITIDO POR: `, 20, 98);
+      doc.text(`REMITIDO POR:`, 20, 90);
       // Definir la posición inicial para el campo "Documento"
-      let docY2 = 98;
+      let docY2 = 90;
       let docZ2 = 94;
   
       // Dibujar cada línea del campo "Documento"
       for (let line of docLines2) {
         doc.text(line, 53, docY2);
-        doc.setLineWidth(0.2);
+        //doc.setLineWidth(0.2);
         docY2 += 5; // Aumentar la posición para la siguiente línea
         docZ2 += 5;
-        doc.line(53, docZ2, 192, docZ2);
+        //doc.line(53, docZ2, 192, docZ2);
       }
   
       const docLines3 = doc.splitTextToSize(formValues.asunto, maxDocWidth);
@@ -694,32 +771,35 @@ for (const line of observacionesLines) {
       // Añadir el campo "Documento" en el PDF
       doc.setFontSize(12);
       doc.setFont("times", "normal");
-      doc.text(`ASUNTO: `, 20, 112);
+      doc.text(`ASUNTO:`, 20, docY2+2);
       // Definir la posición inicial para el campo "Documento"
-      let docY3 = 112;
+      let docY3 = docY2+2;
       let docZ3 = 108;
   
   
       // Dibujar cada línea del campo "Documento"
       for (let line of docLines3) {
         doc.text(line, 40, docY3);
-        doc.setLineWidth(0.2);
+        //doc.setLineWidth(0.2);
         docY3 += 5; // Aumentar la posición para la siguiente línea
         docZ3 += 5;
-        doc.line(40, docZ3, 192, docZ3);
+        //doc.line(40, docZ3, 192, docZ3);
       }
+  
+  
+  
       // Calculate the height needed for the ASUNTO field
       const asuntoHeight = docLines3.length * 5; // Multiplying by 5 for line spacing
   
       // Initial Y-coordinate for the "PASE A" section
-      let paseAY = 115 + asuntoHeight; // Add some spacing
+      let paseAY = docY3; // Add some spacing
   
   
   
       //PASE A:
       doc.setFontSize(12);
       doc.setFont("times", "bold");
-      doc.text("PASE A:", 20, paseAY);
+      doc.text("PASE A:", 20, paseAY+5);
   
       doc.setFontSize(12);
       doc.setFont("times", "normal");
@@ -759,120 +839,159 @@ for (const line of observacionesLines) {
         paseAY+30
       );
   
-      //Esta parte es la del Facultad y agregar
-      const maxDocWidth2 = 57;
-      // Dividir el contenido del campo "Documento" en líneas
-      const docLines4 = doc.splitTextToSize(formValues.ciencias2, maxDocWidth2);
+      // Esta parte es la del Facultad y agregar
+  const maxDocWidth2 = 57;
+  const maxLinesFacultad = 4; // Puedes ajustar este número según tus necesidades
   
-      // Añadir el campo "Documento" en el PDF
-      doc.setFontSize(12);
-      doc.setFont("times", "normal");
-      doc.text(`${formValues.ciencias ? "(X)" : "(   )"}  Facultad `, 20, paseAY+35);
-      // Definir la posición inicial para el campo "Documento"
-      let docY4 = paseAY+35;
-      let docZ4 = paseAY+30;
+  // Dividir el contenido del campo "Documento" en líneas
+  const docLines4 = doc.splitTextToSize(formValues.ciencias2, maxDocWidth2);
   
-      // Dibujar cada línea del campo "Documento"
-      for (let i = 0; i < docLines4.length; i++) {
-        const line = docLines4[i];
-        if (i === 0) {
-          doc.text(line, 44, docY4);
-          docZ4 += 5;
-          doc.line(44, docZ4, 100, docZ4);
-        } else {
-          doc.text(line, 28, docY4);
-          docZ4 += 5;
-          doc.line(28, docZ4, 100, docZ4);
-        }
-        doc.setLineWidth(0.2);
-        docY4 += 5; // Aumentar la posición para la siguiente línea
+  // Añadir el campo "Documento" en el PDF
+  doc.setFontSize(12);
+  doc.setFont("times", "normal");
+  doc.text(`${formValues.ciencias ? "(X)" : "(   )"}  Facultad `, 20, paseAY + 35);
+  // Definir la posición inicial para el campo "Documento"
+  let docY4 = paseAY + 35;
+  let docZ4 = paseAY + 30;
+  
+  // Dibujar cada línea del campo "Documento"
+  for (let i = 0; i < docLines4.length; i++) {
+    const line = docLines4[i];
+    if (i === 0) {
+      doc.text(line, 44, docY4);
+      docZ4 += 5;
+      doc.line(44, docZ4, 100, docZ4);
+    } else {
+      if (i < maxLinesFacultad) {
+        doc.text(line, 44, docY4);
+        docZ4 += 5;
+        doc.line(44, docZ4, 100, docZ4);
+      } else {
+        // Agregar más espacio para el texto si se excede de 2 líneas
+        doc.text(line, 44, docY4 + (i - maxLinesFacultad) * 5);
+        docZ4 += 5;
       }
+    }
+    doc.setLineWidth(0.2);
+    docY4 += 5; // Aumentar la posición para la siguiente línea
+  }
   
-      // Dividir el contenido del campo "Documento" en líneas
-      const docLines5 = doc.splitTextToSize(formValues.direccion2, maxDocWidth2);
+   // Esta parte es para "Dirección"
+  const maxDocWidth3 = 57;
+  const maxLinesDireccion = 4; // Puedes ajustar este número según tus necesidades
   
-      // Añadir el campo "Documento" en el PDF
-      doc.setFontSize(12);
-      doc.setFont("times", "normal");
-      doc.text(`${formValues.direccion ? "(X)" : "(   )"}  Dirección `, 20, paseAY+40);
-      // Definir la posición inicial para el campo "Documento"
-      let docY5 = paseAY+40;
-      let docZ5 = paseAY+35;
+  // Dividir el contenido del campo "Dirección" en líneas
+  const docLines5 = doc.splitTextToSize(formValues.direccion2, maxDocWidth3);
   
-      // Dibujar cada línea del campo "Documento"
-      for (let i = 0; i < docLines5.length; i++) {
-        const line = docLines5[i];
-        if (i === 0) {
-          doc.text(line, 46, docY5);
-          docZ5 += 5;
-          doc.line(46, docZ5, 100, docZ5);
-        } else {
-          doc.text(line, 28, docY5);
-          docZ5 += 5;
-          doc.line(28, docZ5, 100, docZ5);
-        }
-        doc.setLineWidth(0.2);
-        docY5 += 5; // Aumentar la posición para la siguiente línea
+  // Añadir el campo "Dirección" en el PDF
+  doc.setFontSize(12);
+  doc.setFont("times", "normal");
+  doc.text(`${formValues.direccion ? "(X)" : "(   )"}  Dirección `, 20, docY4);
+  // Definir la posición inicial para el campo "Dirección"
+  let docY5 = docY4;
+  let docZ5 = docY4-5;
+  
+  // Dibujar cada línea del campo "Dirección"
+  for (let i = 0; i < docLines5.length; i++) {
+    const line = docLines5[i];
+    if (i === 0) {
+      doc.text(line, 46, docY5);
+      docZ5 += 5;
+      doc.line(46, docZ5, 100, docZ5);
+    } else {
+      if (i < maxLinesDireccion) {
+        doc.text(line, 46, docY5);
+        docZ5 += 5;
+        doc.line(46, docZ5, 100, docZ5);
+      } else {
+        // Agregar más espacio para el texto si se excede de 2 líneas
+        doc.text(line, 46, docY5 + (i - maxLinesDireccion) * 5);
+        docZ5 += 5;
       }
+    }
+    doc.setLineWidth(0.2);
+    docY5 += 5; // Aumentar la posición para la siguiente línea
+  }
   
-      // Dividir el contenido del campo "Documento" en líneas
-      const docLines6 = doc.splitTextToSize(formValues.oficina2, maxDocWidth2);
+  // Repetir el mismo enfoque para los campos "Oficina" y "Otro"
+  // Esta parte es para "Oficina"
+  const maxDocWidth4 = 57;
+  const maxLinesOficina = 4; // Puedes ajustar este número según tus necesidades
   
-      // Añadir el campo "Documento" en el PDF
-      doc.setFontSize(12);
-      doc.setFont("times", "normal");
-      doc.text(`${formValues.oficina ? "(X)" : "(   )"}  Oficina `, 20, paseAY+45);
-      // Definir la posición inicial para el campo "Documento"
-      let docY6 = paseAY+45;
-      let docZ6 = paseAY+40;
+  // Dividir el contenido del campo "Oficina" en líneas
+  const docLines6 = doc.splitTextToSize(formValues.oficina2, maxDocWidth4);
   
-      // Dibujar cada línea del campo "Documento"
-      for (let i = 0; i < docLines6.length; i++) {
-        const line = docLines6[i];
-        if (i === 0) {
-          doc.text(line, 43, docY6);
-          docZ6 += 5;
-          doc.line(43, docZ6, 100, docZ6);
-        } else {
-          doc.text(line, 28, docY6);
-          docZ6 += 5;
-          doc.line(28, docZ6, 100, docZ6);
-        }
-        doc.setLineWidth(0.2);
-        docY6 += 5; // Aumentar la posición para la siguiente línea
+  // Añadir el campo "Oficina" en el PDF
+  doc.setFontSize(12);
+  doc.setFont("times", "normal");
+  doc.text(`${formValues.oficina ? "(X)" : "(   )"}  Oficina `, 20, docY5);
+  // Definir la posición inicial para el campo "Oficina"
+  let docY6 = docY5;
+  let docZ6 = docY5-5;
+  
+  // Dibujar cada línea del campo "Oficina"
+  for (let i = 0; i < docLines6.length; i++) {
+    const line = docLines6[i];
+    if (i === 0) {
+      doc.text(line, 43, docY6);
+      docZ6 += 5;
+      doc.line(43, docZ6, 100, docZ6);
+    } else {
+      if (i < maxLinesOficina) {
+        doc.text(line, 43, docY6);
+        docZ6 += 5;
+        doc.line(43, docZ6, 100, docZ6);
+      } else {
+        // Agregar más espacio para el texto si se excede de 2 líneas
+        doc.text(line, 43, docY6 + (i - maxLinesOficina) * 5);
+        docZ6 += 5;
       }
+    }
+    doc.setLineWidth(0.2);
+    docY6 += 5; // Aumentar la posición para la siguiente línea
+  }
   
-      // Dividir el contenido del campo "Documento" en líneas
-      const docLines7 = doc.splitTextToSize(formValues.otro2, maxDocWidth2);
+  // Esta parte es para "Otro"
+  const maxDocWidth5 = 57;
+  const maxLinesOtro = 4; // Puedes ajustar este número según tus necesidades
   
-      // Añadir el campo "Documento" en el PDF
-      doc.setFontSize(12);
-      doc.setFont("times", "normal");
-      doc.text(`${formValues.otro ? "(X)" : "(   )"}  Otro `, 20, paseAY+50);
-      // Definir la posición inicial para el campo "Documento"
-      let docY7 = paseAY+50;
-      let docZ7 = paseAY+45;;
+  // Dividir el contenido del campo "Otro" en líneas
+  const docLines7 = doc.splitTextToSize(formValues.otro2, maxDocWidth5);
   
-      // Dibujar cada línea del campo "Documento"
-      for (let i = 0; i < docLines7.length; i++) {
-        const line = docLines7[i];
-        if (i === 0) {
-          doc.text(line, 38, docY7);
-          docZ7 += 5;
-          doc.line(38, docZ7, 100, docZ7);
-        } else {
-          doc.text(line, 28, docY7);
-          docZ7 += 5;
-          doc.line(28, docZ7, 100, docZ7);
-        }
-        doc.setLineWidth(0.2);
-        docY7 += 5; // Aumentar la posición para la siguiente línea
+  // Añadir el campo "Otro" en el PDF
+  doc.setFontSize(12);
+  doc.setFont("times", "normal");
+  doc.text(`${formValues.otro ? "(X)" : "(   )"}  Otro `, 20, docY6);
+  // Definir la posición inicial para el campo "Otro"
+  let docY7 = docY6;
+  let docZ7 = docY6-5;
+  
+  // Dibujar cada línea del campo "Otro"
+  for (let i = 0; i < docLines7.length; i++) {
+    const line = docLines7[i];
+    if (i === 0) {
+      doc.text(line, 38, docY7);
+      docZ7 += 5;
+      doc.line(38, docZ7, 100, docZ7);
+    } else {
+      if (i < maxLinesOtro) {
+        doc.text(line, 38, docY7);
+        docZ7 += 5;
+        doc.line(38, docZ7, 100, docZ7);
+      } else {
+        // Agregar más espacio para el texto si se excede de 2 líneas
+        doc.text(line, 38, docY7 + (i - maxLinesOtro) * 5);
+        docZ7 += 5;
       }
+    }
+    doc.setLineWidth(0.2);
+    docY7 += 5; // Aumentar la posición para la siguiente línea
+  }
   
       //PARA:
       doc.setFontSize(12);
       doc.setFont("times", "bold");
-      doc.text("PARA:", 110, paseAY);
+      doc.text("PARA:", 110, paseAY+5);
   
       doc.setFontSize(12);
       doc.setFont("times", "normal");
@@ -957,13 +1076,13 @@ for (const line of observacionesLines) {
   // OBSERVACIONES
   doc.setFontSize(12);
   doc.setFont("times", "bold");
-  doc.text("OBSERVACIONES:", 15, paseAY + 65);
+  doc.text("OBSERVACIONES:", 15, docY7+2);
   const maxObservacionesWidth = 177;
   // Split the observaciones text into lines
   const observacionesLines = doc.splitTextToSize(formValues.observaciones, maxObservacionesWidth);
   
   // Initial Y-coordinate for the observaciones text
-  let observacionesY = paseAY + 70;
+  let observacionesY = docY7+8;
   
   // Dibujar cada línea del observaciones text
   for (const line of observacionesLines) {
@@ -973,27 +1092,53 @@ for (const line of observacionesLines) {
   
     // Draw a line after each line of observaciones
     doc.setLineWidth(0.2);
-    doc.line(15, observacionesY + 1, 192, observacionesY + 1);
+    //doc.line(15, observacionesY + 1, 192, observacionesY + 1);
   
     // Increase the Y-coordinate for the next line
     observacionesY += 5; // Adjust the spacing as needed
   }
       
   
-    /*  doc.setFontSize(6);
-      doc.setFont("times", "normal");
-      doc.text("cc.", 15, 270);
-      if (formValues.cc2) {
-        doc.text(`- ${formValues.cc2}`, 15, 272);
-        doc.text(`-Archivo`, 15, 274);
-        doc.text("LVAT/nmgf", 15, 276);
-      } else {
-        doc.text(`-Archivo`, 15, 272);
-        doc.text("LVAT/nmgf", 15, 274);
-      }*/
+  doc.setFontSize(6);
+  doc.setFont("times", "normal");
+  
+  let yPosition = 270; // Posición vertical inicial
+  let hasCC = false; // Variable para verificar si hay al menos un campo cc
+  doc.text("cc.", 15, 268);
+  // Verificar y agregar campos cc
+  if (formValues.cc2) {
+    doc.text(`- ${formValues.cc2}`, 15, yPosition);
+    yPosition += 2; // Añadir un espacio adicional
+    hasCC = true; // Indicar que hay al menos un campo cc
+  }
+  
+  if (formValues.cc4) {
+    doc.text(`- ${formValues.cc4}`, 15, yPosition);
+    yPosition += 2; // Añadir otro espacio adicional
+    hasCC = true; // Indicar que hay al menos un campo cc
+  }
+  
+  if (formValues.cc6) {
+    doc.text(`- ${formValues.cc6}`, 15, yPosition);
+    yPosition += 2; // Añadir otro espacio adicional
+    hasCC = true; // Indicar que hay al menos un campo cc
+  }
+  
+  // Agregar un guion solo si no hay campos cc
+  if (!hasCC) {
+    doc.text("- ", 15, yPosition);
+    yPosition += 2; // Añadir un espacio adicional
+  }
+  
+  doc.text("- Archivo", 15, yPosition);
+  doc.text("LVAT/nmgf", 15, yPosition + 2); // Agregar espacio después de "Archivo"
+  
+  
+  
       const imgeData = firma;
   
-      doc.addImage(imgeData, "PNG", 70, 230, 60, 30, { align: "center" });
+      doc.addImage(imgeData, "PNG", 70, observacionesY, 60, 30, { align: "center" });
+
 
     const pdfBlob1 = doc.output("blob");
     // Resetear los valores del formulario
@@ -1415,7 +1560,63 @@ for (const line of observacionesLines) {
                       onChange={handleInputChange}
                       required
                     />
+                                        
+                    
                   </div>
+                  <div className="flex items-center pl-3">
+                  <input
+                      id="cc3"
+                      name="cc3"
+                      type="checkbox"
+                      checked={formValues.cc3}
+                      onChange={handleInputChange}
+                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                    />
+                    <label
+                      for="laravel-checkbox"
+                      className="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    >
+                      cc2
+                    </label>
+                    <input
+                      type="text"
+                      id="cc4"
+                      name="cc4"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="cc2"
+                      value={formValues.cc4}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+
+                  <div className="flex items-center pl-3">
+                  <input
+                      id="cc5"
+                      name="cc5"
+                      type="checkbox"
+                      checked={formValues.cc5}
+                      onChange={handleInputChange}
+                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                    />
+                    <label
+                      for="laravel-checkbox"
+                      className="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    >
+                      cc3
+                    </label>
+                    <input
+                      type="text"
+                      id="cc6"
+                      name="cc6"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="cc3"
+                      value={formValues.cc6}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+
                 </li>
               </ul>
             </div>
