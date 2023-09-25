@@ -615,7 +615,7 @@ const downloadLink = document.createElement("a");
 downloadLink.href = URL.createObjectURL(
   new Blob([mergedPdfBlob], { type: "application/pdf" })
 );
-downloadLink.download = `H.E. N ${formValues.envio}-2023-R-UNE.pdf`;
+downloadLink.download = `H.E. N ${formValues.envio2}-2023-R-UNE.pdf`;
 document.body.appendChild(downloadLink);
 downloadLink.click();
 document.body.removeChild(downloadLink);
@@ -646,7 +646,12 @@ resetFormValues();
       remitido2: "",
       asunto2: "",
       observaciones2: "",
-      cc2: "",
+      cc: "",
+      cc2:"",
+      cc3: "",
+      cc4:"",
+      cc5:"",
+      cc6:"",
     });
     setPdfFiles([]);
     setFileNames(["", "", ""]);
