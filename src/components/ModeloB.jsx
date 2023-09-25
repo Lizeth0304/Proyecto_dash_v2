@@ -22,14 +22,36 @@ const ModeloB = () => {
     // Agrega aquí todos los inputs que necesites
   });
 
+  const [showCustomFacultad, setShowCustomFacultad] = useState(false);
+
   const [outputUrl, setOutputUrl] = useState("");
 
-  //***** Nuevo estado para almacenar el archivo seleccionado
-  const [pdfFile, setPdfFile] = useState(null);
+  const [pdfFiles, setPdfFiles] = useState([]); // Cambia a un array para manejar múltiples archivos PDF
 
+  const [generatedPdf, setGeneratedPdf] = useState(null); // Nuevo estado para el PDF generado
+  const [fileNames, setFileNames] = useState(["", "", ""]); // Inicializa los nombres de los archivos
   //****** Función para manejar la carga de archivos
-  const handleFileChange = (event) => {
-    setPdfFile(event.target.files[0]);
+  const handleFileChange = (event, index) => {
+    const files = event.target.files;
+    const newPdfFiles = [];
+  
+    for (let i = 0; i < files.length; i++) {
+      newPdfFiles.push(files[i]);
+    }
+  
+    setPdfFiles((prevPdfFiles) => [...prevPdfFiles, ...newPdfFiles]);
+  
+     // Actualiza el nombre del archivo en el arreglo de nombres
+  if (files.length > 0) {
+    const newFileNames = [...fileNames];
+    newFileNames[index] = files[0].name; // Actualiza el nombre del archivo en la posición correspondiente
+    setFileNames(newFileNames);
+  } else {
+    // Si no se selecciona un archivo, borra el nombre del archivo en la posición correspondiente
+    const newFileNames = [...fileNames];
+    newFileNames[index] = "";
+    setFileNames(newFileNames);
+  }
   };
 
   const generatePDF = () => {
@@ -268,9 +290,11 @@ doc.addImage(imgeData, "PNG", 100, firmaY, 60, 30, { align: "center" });
     // Actualizar el estado con la URL del PDF
     const pdfUrl = doc.output("bloburl");
     setOutputUrl(pdfUrl);
+    return doc;
   };
 
   const handleGeneratePDF = async () => {
+    const generatedPDF = generatePDF();
     const doc = new jsPDF();
     
  // Crear instancia de jsPDF
@@ -500,59 +524,107 @@ doc.text("LVAT/nmgf", 15, yPosition + 2); // Agregar espacio después de "Archiv
 // Add the firma image at the new Y-coordinate
 const imgeData = firma;
 doc.addImage(imgeData, "PNG", 100, firmaY, 60, 30, { align: "center" });
- // Guardar el PDF
-    const pdfBlob1 = doc.output("blob");
-    
-    const pdfDoc1 = await PDFDocument.load(await pdfBlob1.arrayBuffer());
-    const pdfDoc2 = await PDFDocument.create();
 
-    if(pdfFile){
+
+// Crea una lista de promesas para cargar y combinar archivos PDF adjuntos
+const loadAndCombinePromises = [];
+
+// Genera el PDF base y agrégalo a la lista de promesas
+loadAndCombinePromises.push(
+  new Promise(async (resolve) => {
+    const generatedPdfBlob = await generatedPDF.output("blob");
+    const generatedPdfDoc = await PDFDocument.load(
+      await generatedPdfBlob.arrayBuffer()
+    );
+    resolve(generatedPdfDoc);
+  })
+);
+
+// Carga y combina Archivo Adjunto 1 y agrégalo a la lista de promesas
+if (pdfFiles.length > 0) {
+  loadAndCombinePromises.push(
+    new Promise(async (resolve) => {
+      const pdfFile = pdfFiles[0];
       const reader = new FileReader();
       reader.onload = async (e) => {
-        const pdfBlob2 = new Blob([e.target.result], {
+        const pdfBlob = new Blob([e.target.result], {
           type: "application/pdf",
         });
-
-        const pdfDoc2 = await PDFDocument.load(await pdfBlob2.arrayBuffer());
-
-        const copiedPages = await pdfDoc1.copyPages(
-          pdfDoc2,
-          pdfDoc2.getPageIndices()
-        );
-        copiedPages.forEach((page) => {
-          pdfDoc1.addPage(page);
-        });
-    
-        const mergedPdfBlob = await pdfDoc1.save();
-    
-        // Descarga directa del archivo PDF combinado
-        const downloadLink = document.createElement("a");
-        downloadLink.href = URL.createObjectURL(
-          new Blob([mergedPdfBlob], { type: "application/pdf" })
-        );
-        downloadLink.download = `H.T. N ${formValues.envio2}-2023-R-UNE.pdf`;
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-    }
-    reader.readAsArrayBuffer(pdfFile);
-  } else {
-    const mergedPdfBlob = await pdfDoc1.save();
-    
-        // Descarga directa del archivo PDF combinado
-        const downloadLink = document.createElement("a");
-        downloadLink.href = URL.createObjectURL(
-          new Blob([mergedPdfBlob], { type: "application/pdf" })
-        );
-        downloadLink.download = `H.T. N ${formValues.envio2}-2023-R-UNE.pdf`;
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-  }
-        
-
-        resetFormValues();
+        const pdfDoc = await PDFDocument.load(await pdfBlob.arrayBuffer());
+        resolve(pdfDoc);
       };
+      reader.readAsArrayBuffer(pdfFile);
+    })
+  );
+}
+
+// Carga y combina Archivo Adjunto 2 y agrégalo a la lista de promesas
+if (pdfFiles.length > 1) {
+  loadAndCombinePromises.push(
+    new Promise(async (resolve) => {
+      const pdfFile = pdfFiles[1];
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const pdfBlob = new Blob([e.target.result], {
+          type: "application/pdf",
+        });
+        const pdfDoc = await PDFDocument.load(await pdfBlob.arrayBuffer());
+        resolve(pdfDoc);
+      };
+      reader.readAsArrayBuffer(pdfFile);
+    })
+  );
+}
+
+// Carga y combina Archivo Adjunto 3 y agrégalo a la lista de promesas
+if (pdfFiles.length > 2) {
+  loadAndCombinePromises.push(
+    new Promise(async (resolve) => {
+      const pdfFile = pdfFiles[2];
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const pdfBlob = new Blob([e.target.result], {
+          type: "application/pdf",
+        });
+        const pdfDoc = await PDFDocument.load(await pdfBlob.arrayBuffer());
+        resolve(pdfDoc);
+      };
+      reader.readAsArrayBuffer(pdfFile);
+    })
+  );
+}
+
+// Espera a que todas las promesas se completen
+const loadedPdfDocs = await Promise.all(loadAndCombinePromises);
+
+// Combina todos los archivos PDF en el orden deseado
+const mergedPdfDoc = await PDFDocument.create();
+for (const pdfDoc of loadedPdfDocs) {
+  const copiedPages = await mergedPdfDoc.copyPages(
+    pdfDoc,
+    pdfDoc.getPageIndices()
+  );
+  copiedPages.forEach((page) => {
+    mergedPdfDoc.addPage(page);
+  });
+}
+
+// Descarga el PDF resultante
+const mergedPdfBlob = await mergedPdfDoc.save();
+const downloadLink = document.createElement("a");
+downloadLink.href = URL.createObjectURL(
+  new Blob([mergedPdfBlob], { type: "application/pdf" })
+);
+downloadLink.download = `H.E. N ${formValues.envio}-2023-R-UNE.pdf`;
+document.body.appendChild(downloadLink);
+downloadLink.click();
+document.body.removeChild(downloadLink);
+
+// Actualiza los nombres de archivo a vacío
+setFileNames(["", "", ""]);
+
+resetFormValues();
+};
          
     
   
@@ -576,6 +648,12 @@ doc.addImage(imgeData, "PNG", 100, firmaY, 60, 30, { align: "center" });
       observaciones2: "",
       cc2: "",
     });
+    setPdfFiles([]);
+    setFileNames(["", "", ""]);
+    fileNames[0]=null;
+    fileNames[1]=null;
+    fileNames[2]=null;
+    console.log(pdfFile)
   };
 
   useEffect(() => {
@@ -585,6 +663,22 @@ doc.addImage(imgeData, "PNG", 100, firmaY, 60, 30, { align: "center" });
   const handleSubmit = (event) => {
     event.preventDefault();
     // Aquí puedes realizar acciones con los valores del formulario
+  };
+
+  const handleRemoveFile = (index) => {
+    const newPdfFiles = [...pdfFiles];
+    newPdfFiles.splice(index, 1); // Elimina el archivo en la posición especificada
+    setPdfFiles(newPdfFiles);
+  
+    const newFileNames = [...fileNames];
+    newFileNames[index] = ""; // Establece el nombre del archivo en blanco
+    setFileNames(newFileNames);
+  
+    // Restablecer el valor del input file
+    const fileInput = document.getElementById(`fileAdjunto${index + 1}`);
+    if (fileInput) {
+      fileInput.value = "";
+    }
   };
 
   return (
@@ -768,20 +862,102 @@ doc.addImage(imgeData, "PNG", 100, firmaY, 60, 30, { align: "center" });
           </div>
         </form>
         <div>
-          <label
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            for="fileInput"
-          >
-            Adjuntar Archivo
-          </label>
-          <input
-            type="file"
-            id="fileAdjunto"
-            name="fileAdjunto"
-            class="block w-full mb-5 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-            onChange={handleFileChange}
-          ></input>
-        </div>
+  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+    Archivo Adjunto 1:
+  </label>
+  <div className="flex items-center">
+    <input
+      type="file"
+      id="fileAdjunto1"
+      name="fileAdjunto1"
+      className="hidden" // Oculta el input de tipo "file"
+      onChange={(e) => handleFileChange(e, 0)}
+    />
+    <label
+      htmlFor="fileAdjunto1"
+      className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg mr-2"
+    >
+      Adjuntar Archivo
+    </label>
+    {fileNames[0] && (
+      <div className="text-gray-900 dark:text-white mr-2">{fileNames[0]}</div>
+    )}
+    {fileNames[0] && (
+      <button
+        type="button"
+        className="text-red-500 hover:text-red-600 font-semibold"
+        onClick={() => handleRemoveFile(0)}
+      >
+        Eliminar
+      </button>
+    )}
+  </div>
+</div>
+<div>
+  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+    Archivo Adjunto 2:
+  </label>
+  <div className="flex items-center">
+    <input
+      type="file"
+      id="fileAdjunto2"
+      name="fileAdjunto2"
+      className="hidden" // Oculta el input de tipo "file"
+      onChange={(e) => handleFileChange(e, 1)}
+    />
+    <label
+      htmlFor="fileAdjunto2"
+      className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg mr-2"
+    >
+      Adjuntar Archivo
+    </label>
+    {fileNames[1] && (
+      <div className="text-gray-900 dark:text-white mr-2">{fileNames[1]}</div>
+    )}
+    {fileNames[1] && (
+      <button
+        type="button"
+        className="text-red-500 hover:text-red-600 font-semibold"
+        onClick={() => handleRemoveFile(1)}
+      >
+        Eliminar
+      </button>
+    )}
+  </div>
+</div>
+<div>
+  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+    Archivo Adjunto 3:
+  </label>
+  <div className="flex items-center">
+    <input
+      type="file"
+      id="fileAdjunto3"
+      name="fileAdjunto3"
+      className="hidden" // Oculta el input de tipo "file"
+      onChange={(e) => handleFileChange(e, 2)}
+    />
+    <label
+      htmlFor="fileAdjunto3"
+      className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg mr-2"
+    >
+      Adjuntar Archivo
+    </label>
+    {fileNames[2] && (
+      <div className="text-gray-900 dark:text-white mr-2">{fileNames[2]}</div>
+    )}
+    {fileNames[2] && (
+      <button
+        type="button"
+        className="text-red-500 hover:text-red-600 font-semibold"
+        onClick={() => handleRemoveFile(2)}
+      >
+        Eliminar
+      </button>
+    )}
+  </div>
+</div>
+<br></br>
         <button
           type="button"
           onClick={handleGeneratePDF}
