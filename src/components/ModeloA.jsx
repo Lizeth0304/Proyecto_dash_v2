@@ -800,7 +800,7 @@ doc.text("LVAT/nmgf", 15, yPosition + 2); // Agregar espacio después de "Archiv
 // Usa la imagen de firma personalizada si está disponible, de lo contrario, usa la predeterminada
 const imgeData = firmaPersonalizada || firmaPredeterminada;
 
-doc.addImage(imgeData, "PNG", 70, observacionesY, 60, 30, { align: "center" });
+doc.addImage(imgeData, "PNG", 70, observacionesY, 55.06, 34, { align: "center" });
 // Llama a generatePDF para actualizar el PDF con las firmas actuales
 setGeneratedPdf(doc);
 
@@ -1453,7 +1453,7 @@ doc.text("LVAT/nmgf", 15, yPosition + 2); // Agregar espacio después de "Archiv
 // Usa la imagen de firma personalizada si está disponible, de lo contrario, usa la predeterminada
 const imgeData = firmaPersonalizada || firmaPredeterminada;
 
-doc.addImage(imgeData, "PNG", 70, observacionesY, 60, 30, { align: "center" });
+doc.addImage(imgeData, "PNG", 70, observacionesY, 55.06, 34, { align: "center" });
 // Llama a generatePDF para actualizar el PDF con las firmas actuales
 generatePDF();
 
