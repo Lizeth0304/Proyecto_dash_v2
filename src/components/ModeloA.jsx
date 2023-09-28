@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { jsPDF } from "jspdf/dist/jspdf.umd.min.js";
 import VisualizadorPDF from "./VisualizadorPDF";
-import firma from "./firma_rector_vladimiro.png";
+import firma from "./firma_rectora.png";
 import { PDFDocument } from "pdf-lib";
 
 const ModeloA = () => {
@@ -226,8 +226,8 @@ const ModeloA = () => {
     // Añadir el campo "Documento" en el PDF
     doc.setFontSize(12);
     doc.setFont("times", "normal");
-    doc.text(`DOCUMENTO: ${formValues.documento}`, 20, 80);
-
+    doc.text(`DOCUMENTO:`, 20, 80);
+    doc.text(formValues.documento,53,80)
     // Definir la posición inicial para el campo "Documento"
     let docY = 80;
     let docZ = 76;
@@ -256,48 +256,96 @@ const ModeloA = () => {
       doc.text(`${formValues.expediente}`, 20, 85); // Posición original para "expediente"
     }
 
-    // Dividir el contenido del campo "Documento" en líneas
-    const docLines2 = doc.splitTextToSize(formValues.remitido, maxDocWidth);
+// Añadir el campo "REMITIDO POR" en el PDF
+doc.setFontSize(12);
+doc.setFont("times", "normal");
+doc.text(`REMITIDO POR:`, 20, 92);
+// Definir la posición inicial para el campo "REMITIDO POR"
+let docY2 = 92;
+let docZ2 = 94;
 
-    // Añadir el campo "Documento" en el PDF
-    doc.setFontSize(12);
-    doc.setFont("times", "normal");
-    doc.text(`REMITIDO POR:`, 20, 90);
-    // Definir la posición inicial para el campo "Documento"
-    let docY2 = 90;
-    let docZ2 = 94;
+// Dividir el contenido del campo "Documento" en líneas
+const docLines2 = doc.splitTextToSize(formValues.remitido, maxDocWidth);
 
-    // Dibujar cada línea del campo "Documento"
-    for (let line of docLines2) {
-      doc.text(line, 53, docY2);
-      //doc.setLineWidth(0.2);
-      docY2 += 5; // Aumentar la posición para la siguiente línea
-      docZ2 += 5;
-      //doc.line(53, docZ2, 192, docZ2);
+// Contar la cantidad de líneas en el campo "REMITIDO POR"
+const numLinesRemitido = docLines2.length;
+
+// Dibujar cada línea del campo "REMITIDO POR" y justificar el texto por palabra
+for (let i = 0; i < numLinesRemitido; i++) {
+  const line = docLines2[i];
+  const words = line.split(' '); // Dividir la línea en palabras
+
+  // Si es la última línea, no justificar, dejar alineación izquierda
+  if (i === numLinesRemitido - 1) {
+    let xPos = 53;
+    for (let word of words) {
+      doc.text(word, xPos, docY2);
+      xPos += doc.getTextWidth(word) + 2; // Agregar un espacio fijo entre palabras
     }
-    const maxDocWidthAsunto = 155;
-    const docLines3 = doc.splitTextToSize(formValues.asunto, maxDocWidthAsunto);
-        
-    // Añadir el campo "Documento" en el PDF
-    doc.setFontSize(12);
-    doc.setFont("times", "normal");
-    doc.text(`ASUNTO:`, 20, docY2+2);
-    // Definir la posición inicial para el campo "Documento"
-    let docY3 = docY2+2;
-    let docZ3 = 108;
+  } else {
+    const totalWidth = words.reduce((acc, word) => acc + doc.getTextWidth(word), 0);
+    const spaceWidth = (140 - totalWidth) / (words.length - 1); // Espacios para justificar (140 es el ancho máximo)
+    let xPos = 53;
 
-
-    // Dibujar cada línea del campo "Documento"
-    for (let line of docLines3) {
-      doc.text(line, 40, docY3);
-      //doc.setLineWidth(0.2);
-      docY3 += 5; // Aumentar la posición para la siguiente línea
-      docZ3 += 5;
-      //doc.line(40, docZ3, 192, docZ3);
+    for (let j = 0; j < words.length; j++) {
+      doc.text(words[j], xPos, docY2);
+      if (j < words.length - 1) {
+        xPos += doc.getTextWidth(words[j]) + spaceWidth;
+      } else {
+        xPos += doc.getTextWidth(words[j]);
+      }
     }
+  }
+
+  docY2 += 5; // Aumentar la posición para la siguiente línea
+  docZ2 += 5;
+}
 
 
+// Añadir el campo "ASUNTO" en el PDF
+doc.setFontSize(12);
+doc.setFont("times", "normal");
+doc.text(`ASUNTO:`, 20, docY2 + 5);
+// Definir la posición inicial para el campo "ASUNTO"
+let docY3 = docY2 + 5;
+let docZ3 = 108;
 
+// Dividir el contenido del campo "ASUNTO" en líneas
+const docLines3 = doc.splitTextToSize(formValues.asunto, maxDocWidth);
+
+// Contar la cantidad de líneas en el campo "ASUNTO"
+const numLinesAsunto = docLines3.length;
+
+// Dibujar cada línea del campo "ASUNTO" y justificar el texto por palabra
+for (let i = 0; i < numLinesAsunto; i++) {
+  const line = docLines3[i];
+  const words = line.split(' '); // Dividir la línea en palabras
+
+  // Si es la última línea, no justificar, dejar alineación izquierda
+  if (i === numLinesAsunto - 1) {
+    let xPos = 53;
+    for (let word of words) {
+      doc.text(word, xPos, docY3);
+      xPos += doc.getTextWidth(word) + 2; // Agregar un espacio fijo entre palabras
+    }
+  } else {
+    const totalWidth = words.reduce((acc, word) => acc + doc.getTextWidth(word), 0);
+    const spaceWidth = (140 - totalWidth) / (words.length - 1); // Espacios para justificar (155 es el ancho máximo)
+    let xPos = 53;
+
+    for (let j = 0; j < words.length; j++) {
+      doc.text(words[j], xPos, docY3);
+      if (j < words.length - 1) {
+        xPos += doc.getTextWidth(words[j]) + spaceWidth;
+      } else {
+        xPos += doc.getTextWidth(words[j]);
+      }
+    }
+  }
+
+  docY3 += 5; // Aumentar la posición para la siguiente línea
+  docZ3 += 5;
+}
     // Calculate the height needed for the ASUNTO field
     const asuntoHeight = docLines3.length * 5; // Multiplying by 5 for line spacing
 
@@ -583,29 +631,51 @@ for (let i = 0; i < docLines7.length; i++) {
       paseAY+60
     );
 
-// OBSERVACIONES
+// Añadir el campo "REMITIDO POR" en el PDF
 doc.setFontSize(12);
-doc.setFont("times", "bold");
+doc.setFont("times", "normal");
 doc.text("OBSERVACIONES:", 15, docY7+15);
-const maxObservacionesWidth = 177;
-// Split the observaciones text into lines
-const observacionesLines = doc.splitTextToSize(formValues.observaciones, maxObservacionesWidth);
-
+// Definir la posición inicial para el campo "REMITIDO POR"
 // Initial Y-coordinate for the observaciones text
 let observacionesY = docY7+20;
 
-// Dibujar cada línea del observaciones text
-for (const line of observacionesLines) {
-  doc.setFontSize(12);
-  doc.setFont("times", "normal");
-  doc.text(line, 15, observacionesY);
+const maxObservacionesWidth = 177;
+// Split the observaciones text into lines
 
-  // Draw a line after each line of observaciones
-  doc.setLineWidth(0.2);
-  //doc.line(15, observacionesY + 1, 192, observacionesY + 1);
+// Dividir el contenido del campo "Documento" en líneas
+const observacionesLines = doc.splitTextToSize(formValues.observaciones, maxObservacionesWidth);
 
-  // Increase the Y-coordinate for the next line
-  observacionesY += 5; // Adjust the spacing as needed
+// Contar la cantidad de líneas en el campo "OBSERVACIONES"
+const numLinesObs = observacionesLines.length;
+
+// Dibujar cada línea del campo "OBSERVACIONES" y justificar el texto por palabra
+for (let i = 0; i < numLinesObs; i++) {
+  const line = observacionesLines[i];
+  const words = line.split(' '); // Dividir la línea en palabras
+
+  // Si es la última línea, no justificar, dejar alineación izquierda
+  if (i === numLinesObs - 1) {
+    let xPos = 15;
+    for (let word of words) {
+      doc.text(word, xPos, observacionesY);
+      xPos += doc.getTextWidth(word) + 2; // Agregar un espacio fijo entre palabras
+    }
+  } else {
+    const totalWidth = words.reduce((acc, word) => acc + doc.getTextWidth(word), 0);
+    const spaceWidth = (177 - totalWidth) / (words.length - 1); // Espacios para justificar (140 es el ancho máximo)
+    let xPos = 15;
+
+    for (let j = 0; j < words.length; j++) {
+      doc.text(words[j], xPos, observacionesY);
+      if (j < words.length - 1) {
+        xPos += doc.getTextWidth(words[j]) + spaceWidth;
+      } else {
+        xPos += doc.getTextWidth(words[j]);
+      }
+    }
+  }
+    // Increase the Y-coordinate for the next line
+    observacionesY += 5; // Adjust the spacing as needed
 }
     
 
@@ -778,49 +848,96 @@ if (docHeight > 5) {
   doc.text(`${formValues.expediente}`, 20, 85); // Posición original para "expediente"
 }
 
-// Dividir el contenido del campo "Documento" en líneas
-const docLines2 = doc.splitTextToSize(formValues.remitido, maxDocWidth);
-
-// Añadir el campo "Documento" en el PDF
+// Añadir el campo "REMITIDO POR" en el PDF
 doc.setFontSize(12);
 doc.setFont("times", "normal");
 doc.text(`REMITIDO POR:`, 20, 90);
-// Definir la posición inicial para el campo "Documento"
+// Definir la posición inicial para el campo "REMITIDO POR"
 let docY2 = 90;
 let docZ2 = 94;
 
-// Dibujar cada línea del campo "Documento"
-for (let line of docLines2) {
-  doc.text(line, 53, docY2);
-  //doc.setLineWidth(0.2);
-  docY2 += 5; // Aumentar la posición para la siguiente línea
-  docZ2 += 5;
-  //doc.line(53, docZ2, 192, docZ2);
+// Dividir el contenido del campo "Documento" en líneas
+const docLines2 = doc.splitTextToSize(formValues.remitido, maxDocWidth);
+
+// Contar la cantidad de líneas en el campo "REMITIDO POR"
+const numLinesRemitido = docLines2.length;
+
+// Dibujar cada línea del campo "REMITIDO POR" y justificar el texto por palabra
+for (let i = 0; i < numLinesRemitido; i++) {
+const line = docLines2[i];
+const words = line.split(' '); // Dividir la línea en palabras
+
+// Si es la última línea, no justificar, dejar alineación izquierda
+if (i === numLinesRemitido - 1) {
+let xPos = 53;
+for (let word of words) {
+  doc.text(word, xPos, docY2);
+  xPos += doc.getTextWidth(word) + 2; // Agregar un espacio fijo entre palabras
+}
+} else {
+const totalWidth = words.reduce((acc, word) => acc + doc.getTextWidth(word), 0);
+const spaceWidth = (140 - totalWidth) / (words.length - 1); // Espacios para justificar (140 es el ancho máximo)
+let xPos = 53;
+
+for (let j = 0; j < words.length; j++) {
+  doc.text(words[j], xPos, docY2);
+  if (j < words.length - 1) {
+    xPos += doc.getTextWidth(words[j]) + spaceWidth;
+  } else {
+    xPos += doc.getTextWidth(words[j]);
+  }
+}
 }
 
-const maxDocWidthAsunto = 155;
-const docLines3 = doc.splitTextToSize(formValues.asunto, maxDocWidthAsunto);
-    
-// Añadir el campo "Documento" en el PDF
+docY2 += 5; // Aumentar la posición para la siguiente línea
+docZ2 += 5;
+}
+
+
+// Añadir el campo "ASUNTO" en el PDF
 doc.setFontSize(12);
 doc.setFont("times", "normal");
-doc.text(`ASUNTO:`, 20, docY2+2);
-// Definir la posición inicial para el campo "Documento"
-let docY3 = docY2+2;
+doc.text(`ASUNTO:`, 20, docY2 + 2);
+// Definir la posición inicial para el campo "ASUNTO"
+let docY3 = docY2 + 2;
 let docZ3 = 108;
 
+// Dividir el contenido del campo "ASUNTO" en líneas
+const docLines3 = doc.splitTextToSize(formValues.asunto, maxDocWidth);
 
-// Dibujar cada línea del campo "Documento"
-for (let line of docLines3) {
-  doc.text(line, 40, docY3);
-  //doc.setLineWidth(0.2);
-  docY3 += 5; // Aumentar la posición para la siguiente línea
-  docZ3 += 5;
-  //doc.line(40, docZ3, 192, docZ3);
+// Contar la cantidad de líneas en el campo "ASUNTO"
+const numLinesAsunto = docLines3.length;
+
+// Dibujar cada línea del campo "ASUNTO" y justificar el texto por palabra
+for (let i = 0; i < numLinesAsunto; i++) {
+const line = docLines3[i];
+const words = line.split(' '); // Dividir la línea en palabras
+
+// Si es la última línea, no justificar, dejar alineación izquierda
+if (i === numLinesAsunto - 1) {
+let xPos = 40;
+for (let word of words) {
+  doc.text(word, xPos, docY3);
+  xPos += doc.getTextWidth(word) + 2; // Agregar un espacio fijo entre palabras
+}
+} else {
+const totalWidth = words.reduce((acc, word) => acc + doc.getTextWidth(word), 0);
+const spaceWidth = (155 - totalWidth) / (words.length - 1); // Espacios para justificar (155 es el ancho máximo)
+let xPos = 40;
+
+for (let j = 0; j < words.length; j++) {
+  doc.text(words[j], xPos, docY3);
+  if (j < words.length - 1) {
+    xPos += doc.getTextWidth(words[j]) + spaceWidth;
+  } else {
+    xPos += doc.getTextWidth(words[j]);
+  }
+}
 }
 
-
-
+docY3 += 5; // Aumentar la posición para la siguiente línea
+docZ3 += 5;
+}
 // Calculate the height needed for the ASUNTO field
 const asuntoHeight = docLines3.length * 5; // Multiplying by 5 for line spacing
 
@@ -1106,27 +1223,49 @@ doc.text(
   paseAY+60
 );
 
-// OBSERVACIONES
+// Añadir el campo "REMITIDO POR" en el PDF
 doc.setFontSize(12);
-doc.setFont("times", "bold");
+doc.setFont("times", "normal");
 doc.text("OBSERVACIONES:", 15, docY7+15);
-const maxObservacionesWidth = 177;
-// Split the observaciones text into lines
-const observacionesLines = doc.splitTextToSize(formValues.observaciones, maxObservacionesWidth);
-
+// Definir la posición inicial para el campo "REMITIDO POR"
 // Initial Y-coordinate for the observaciones text
 let observacionesY = docY7+20;
 
-// Dibujar cada línea del observaciones text
-for (const line of observacionesLines) {
-doc.setFontSize(12);
-doc.setFont("times", "normal");
-doc.text(line, 15, observacionesY);
+const maxObservacionesWidth = 177;
+// Split the observaciones text into lines
 
-// Draw a line after each line of observaciones
-doc.setLineWidth(0.2);
-//doc.line(15, observacionesY + 1, 192, observacionesY + 1);
+// Dividir el contenido del campo "Documento" en líneas
+const observacionesLines = doc.splitTextToSize(formValues.observaciones, maxObservacionesWidth);
 
+// Contar la cantidad de líneas en el campo "OBSERVACIONES"
+const numLinesObs = observacionesLines.length;
+
+// Dibujar cada línea del campo "OBSERVACIONES" y justificar el texto por palabra
+for (let i = 0; i < numLinesObs; i++) {
+const line = observacionesLines[i];
+const words = line.split(' '); // Dividir la línea en palabras
+
+// Si es la última línea, no justificar, dejar alineación izquierda
+if (i === numLinesObs - 1) {
+let xPos = 15;
+for (let word of words) {
+  doc.text(word, xPos, observacionesY);
+  xPos += doc.getTextWidth(word) + 2; // Agregar un espacio fijo entre palabras
+}
+} else {
+const totalWidth = words.reduce((acc, word) => acc + doc.getTextWidth(word), 0);
+const spaceWidth = (177 - totalWidth) / (words.length - 1); // Espacios para justificar (140 es el ancho máximo)
+let xPos = 15;
+
+for (let j = 0; j < words.length; j++) {
+  doc.text(words[j], xPos, observacionesY);
+  if (j < words.length - 1) {
+    xPos += doc.getTextWidth(words[j]) + spaceWidth;
+  } else {
+    xPos += doc.getTextWidth(words[j]);
+  }
+}
+}
 // Increase the Y-coordinate for the next line
 observacionesY += 5; // Adjust the spacing as needed
 }
@@ -1171,6 +1310,7 @@ doc.text("LVAT/nmgf", 15, yPosition + 2); // Agregar espacio después de "Archiv
 const imgeData = firma;
 
 doc.addImage(imgeData, "PNG", 70, observacionesY, 60, 30, { align: "center" });
+
 
 // Crea una lista de promesas para cargar y combinar archivos PDF adjuntos
 const loadAndCombinePromises = [];
@@ -1398,7 +1538,7 @@ resetFormValues();
               onChange={handleInputChange}
             />
           </div>
-          <div className="mb-6">
+          <div className="mb-6" >
             <label
               for="remitido"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
