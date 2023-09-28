@@ -30,6 +30,23 @@ const ModeloB = () => {
 
   const [generatedPdf, setGeneratedPdf] = useState(null); // Nuevo estado para el PDF generado
   const [fileNames, setFileNames] = useState(["", "", ""]); // Inicializa los nombres de los archivos
+  
+  const [firmaPersonalizada, setFirmaPersonalizada] = useState(null);
+  const firmaPredeterminada = firma; // Supongo que la imagen predeterminada se llama "firma"
+  const handleFirmaChange = (event) => {
+    const file = event.target.files[0]; // Obtén el archivo seleccionado
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const imageDataUrl = e.target.result;
+        // Almacena la imagen de firma seleccionada en el estado
+        setFirmaPersonalizada(imageDataUrl);
+        generatePDF(); // Actualiza el PDF cuando se cambia la firma personalizada
+      };
+      reader.readAsDataURL(file); // Lee el archivo como una URL de datos
+    }
+  }
+
   //****** Función para manejar la carga de archivos
   const handleFileChange = (event, index) => {
     const files = event.target.files;
@@ -343,9 +360,12 @@ yPosition += 2; // Añadir un espacio adicional
 doc.text("- Archivo", 15, yPosition);
 doc.text("LVAT/nmgf", 15, yPosition + 2); // Agregar espacio después de "Archivo"
 
-// Add the firma image at the new Y-coordinate
-const imgeData = firma;
-doc.addImage(imgeData, "PNG", 100, firmaY, 60, 30, { align: "center" });
+// Usa la imagen de firma personalizada si está disponible, de lo contrario, usa la predeterminada
+const imgeData = firmaPersonalizada || firmaPredeterminada;
+
+doc.addImage(imgeData, "PNG", 70, observacionesY, 60, 30, { align: "center" });
+// Llama a generatePDF para actualizar el PDF con las firmas actuales
+setGeneratedPdf(doc);
     // Guardar el PDF
     // doc.save("ModeloB.pdf");
 
@@ -645,10 +665,12 @@ yPosition += 2; // Añadir un espacio adicional
 doc.text("- Archivo", 15, yPosition);
 doc.text("LVAT/nmgf", 15, yPosition + 2); // Agregar espacio después de "Archivo"
 
-// Add the firma image at the new Y-coordinate
-const imgeData = firma;
-doc.addImage(imgeData, "PNG", 100, firmaY, 60, 30, { align: "center" });
+// Usa la imagen de firma personalizada si está disponible, de lo contrario, usa la predeterminada
+const imgeData = firmaPersonalizada || firmaPredeterminada;
 
+doc.addImage(imgeData, "PNG", 70, observacionesY, 60, 30, { align: "center" });
+// Llama a generatePDF para actualizar el PDF con las firmas actuales
+generatePDF();
 
 // Crea una lista de promesas para cargar y combinar archivos PDF adjuntos
 const loadAndCombinePromises = [];
@@ -942,6 +964,26 @@ resetFormValues();
               required
             />
           </div>
+          <div>
+            <label htmlFor="firma2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">FIRMA PERSONALIZADA:</label>
+            <input
+              type="file"
+              id="firma2"
+              name="firma2"
+              accept=".png, .jpg, .jpeg" // Acepta archivos PNG, JPG y JPEG
+              onChange={handleFirmaChange} // Maneja el cambio de la imagen de firma
+            />
+          </div>
+          <img
+            src={firmaPersonalizada || firmaPredeterminada}
+            alt="Firma personalizada 2"
+            onLoad={generatePDF}
+            style={{
+              maxWidth: "200px", // Establece el ancho máximo deseado
+              height: "auto", // Permite que la altura se ajuste automáticamente
+              marginTop: "10px" // Espaciado superior opcional
+            }}
+          />
           <div className="mb-6">
             <label
               for="documento"
