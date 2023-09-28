@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { jsPDF } from "jspdf/dist/jspdf.umd.min.js";
 import VisualizadorPDF from "./VisualizadorPDF";
-import firma from "./firma_rectora.png";
+import firma2 from "./firma_rectora.png";
 import { PDFDocument } from "pdf-lib";
 
 const ModeloB = () => {
@@ -31,21 +31,30 @@ const ModeloB = () => {
   const [generatedPdf, setGeneratedPdf] = useState(null); // Nuevo estado para el PDF generado
   const [fileNames, setFileNames] = useState(["", "", ""]); // Inicializa los nombres de los archivos
   
-  const [firmaPersonalizada, setFirmaPersonalizada] = useState(null);
-  const firmaPredeterminada = firma; // Supongo que la imagen predeterminada se llama "firma"
-  const handleFirmaChange = (event) => {
-    const file = event.target.files[0]; // Obtén el archivo seleccionado
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const imageDataUrl = e.target.result;
-        // Almacena la imagen de firma seleccionada en el estado
-        setFirmaPersonalizada(imageDataUrl);
-        generatePDF(); // Actualiza el PDF cuando se cambia la firma personalizada
-      };
-      reader.readAsDataURL(file); // Lee el archivo como una URL de datos
-    }
+   // Estado para la firma personalizada y predeterminada
+const [firmaPersonalizada2, setFirmaPersonalizada2] = useState(null);
+
+// Supongamos que tienes una URL de imagen para la firma predeterminada
+const firmaPredeterminadaUrl2 = firma2; // Reemplaza con la URL real
+
+// Inicializa la firma predeterminada con la URL
+const [firmaPredeterminada2, setFirmaPredeterminada2] = useState(firmaPredeterminadaUrl2);
+
+const handleFirmaChange = (event) => {
+  const file = event.target.files[0]; // Obtén el archivo seleccionado
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const imageDataUrl2 = e.target.result;
+      // Almacena la nueva firma personalizada en el almacenamiento local
+      localStorage.setItem("firmaPersonalizada2", imageDataUrl2);
+      // Actualiza la firma personalizada en el estado
+      setFirmaPersonalizada2(imageDataUrl2);
+      generatePDF(); // Actualiza el PDF con la nueva firma personalizada
+    };
+    reader.readAsDataURL(file); // Lee el archivo como una URL de datos
   }
+};
 
   //****** Función para manejar la carga de archivos
   const handleFileChange = (event, index) => {
@@ -361,9 +370,9 @@ doc.text("- Archivo", 15, yPosition);
 doc.text("LVAT/nmgf", 15, yPosition + 2); // Agregar espacio después de "Archivo"
 
 // Usa la imagen de firma personalizada si está disponible, de lo contrario, usa la predeterminada
-const imgeData = firmaPersonalizada || firmaPredeterminada;
+const imgeData2 = firmaPersonalizada2 || firmaPredeterminada2;
 
-doc.addImage(imgeData, "PNG", 70, observacionesY, 60, 30, { align: "center" });
+doc.addImage(imgeData2, "PNG", 70, observacionesY, 60, 30, { align: "center" });
 // Llama a generatePDF para actualizar el PDF con las firmas actuales
 setGeneratedPdf(doc);
     // Guardar el PDF
@@ -666,9 +675,9 @@ doc.text("- Archivo", 15, yPosition);
 doc.text("LVAT/nmgf", 15, yPosition + 2); // Agregar espacio después de "Archivo"
 
 // Usa la imagen de firma personalizada si está disponible, de lo contrario, usa la predeterminada
-const imgeData = firmaPersonalizada || firmaPredeterminada;
+const imgeData2 = firmaPersonalizada2 || firmaPredeterminada2;
 
-doc.addImage(imgeData, "PNG", 70, observacionesY, 60, 30, { align: "center" });
+doc.addImage(imgeData2, "PNG", 70, observacionesY, 60, 30, { align: "center" });
 // Llama a generatePDF para actualizar el PDF con las firmas actuales
 generatePDF();
 
@@ -809,6 +818,12 @@ resetFormValues();
 
   useEffect(() => {
     generatePDF();
+           // Intenta obtener la firma personalizada desde el almacenamiento local
+  const storedFirmaPersonalizada2 = localStorage.getItem("firmaPersonalizada2");
+  if (storedFirmaPersonalizada2) {
+    // Si se encuentra una firma personalizada almacenada, configúrala en el estado
+    setFirmaPersonalizada2(storedFirmaPersonalizada2);
+  }
   }, [formValues]); // Ejecutar generatePDF cada vez que formValues cambie
 
   const handleSubmit = (event) => {
@@ -965,25 +980,26 @@ resetFormValues();
             />
           </div>
           <div>
-            <label htmlFor="firma2" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">FIRMA PERSONALIZADA:</label>
-            <input
-              type="file"
-              id="firma2"
-              name="firma2"
-              accept=".png, .jpg, .jpeg" // Acepta archivos PNG, JPG y JPEG
-              onChange={handleFirmaChange} // Maneja el cambio de la imagen de firma
-            />
-          </div>
-          <img
-            src={firmaPersonalizada || firmaPredeterminada}
-            alt="Firma personalizada 2"
-            onLoad={generatePDF}
-            style={{
-              maxWidth: "200px", // Establece el ancho máximo deseado
-              height: "auto", // Permite que la altura se ajuste automáticamente
-              marginTop: "10px" // Espaciado superior opcional
-            }}
-          />
+          <label htmlFor="firma2">Firma personalizada:</label>
+        <input
+          type="file"
+          id="firma2"
+          name="firma2"
+          accept=".png, .jpg, .jpeg" // Acepta archivos PNG, JPG y JPEG
+          onChange={handleFirmaChange} // Maneja el cambio de la imagen de firma
+        />
+      </div>
+      <img
+  src={firmaPersonalizada2 || firmaPredeterminada2}
+  alt="Firma personalizada2"
+  onLoad={generatePDF}
+  style={{
+    maxWidth: "200px", // Establece el ancho máximo deseado
+    maxHeight: "200px", // Establece el ancho máximo deseado
+    height: "auto", // Permite que la altura se ajuste automáticamente
+    marginTop: "10px" // Espaciado superior opcional
+  }}
+/>
           <div className="mb-6">
             <label
               for="documento"

@@ -95,26 +95,32 @@ const ModeloA = () => {
   const [pdfFiles, setPdfFiles] = useState([]); // Cambia a un array para manejar múltiples archivos PDF
 
   const [generatedPdf, setGeneratedPdf] = useState(null); // Nuevo estado para el PDF generado
-  const [firmaPersonalizada, setFirmaPersonalizada] = useState(null);
-  const firmaPredeterminada = firma; // Supongo que la imagen predeterminada se llama "firma"
-  const handleFirmaChange = (event) => {
-    const file = event.target.files[0]; // Obtén el archivo seleccionado
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const imageDataUrl = e.target.result;
-        // Almacena la imagen de firma seleccionada en el estado
-        setFirmaPersonalizada(imageDataUrl);
-        generatePDF(); // Actualiza el PDF cuando se cambia la firma personalizada
-      };
-      reader.readAsDataURL(file); // Lee el archivo como una URL de datos
-    }
-  };
-  
+  // Estado para la firma personalizada y predeterminada
+const [firmaPersonalizada, setFirmaPersonalizada] = useState(null);
 
+// Supongamos que tienes una URL de imagen para la firma predeterminada
+const firmaPredeterminadaUrl = firma; // Reemplaza con la URL real
+
+// Inicializa la firma predeterminada con la URL
+const [firmaPredeterminada, setFirmaPredeterminada] = useState(firmaPredeterminadaUrl);
+
+const handleFirmaChange = (event) => {
+  const file = event.target.files[0]; // Obtén el archivo seleccionado
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const imageDataUrl = e.target.result;
+      // Almacena la nueva firma personalizada en el almacenamiento local
+      localStorage.setItem("firmaPersonalizada", imageDataUrl);
+      // Actualiza la firma personalizada en el estado
+      setFirmaPersonalizada(imageDataUrl);
+      generatePDF(); // Actualiza el PDF con la nueva firma personalizada
+    };
+    reader.readAsDataURL(file); // Lee el archivo como una URL de datos
+  }
+};
+  
  
-  
-  
   //****** Función para manejar la carga de archivos
   const handleFileChange = (event, index) => {
     const files = event.target.files;
@@ -1560,6 +1566,12 @@ resetFormValues();
 
   useEffect(() => {
     generatePDF();
+        // Intenta obtener la firma personalizada desde el almacenamiento local
+  const storedFirmaPersonalizada = localStorage.getItem("firmaPersonalizada");
+  if (storedFirmaPersonalizada) {
+    // Si se encuentra una firma personalizada almacenada, configúrala en el estado
+    setFirmaPersonalizada(storedFirmaPersonalizada);
+  }
   }, [formValues]); // Ejecutar generatePDF cada vez que formValues cambie
 
   const handleSubmit = (event) => {
@@ -2253,25 +2265,28 @@ resetFormValues();
             />
           </div>
           <div>
-            <label htmlFor="firma" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">FIRMA PERSONALIZADA:</label>
-            <input
-              type="file"
-              id="firma"
-              name="firma"
-              accept=".png, .jpg, .jpeg" // Acepta archivos PNG, JPG y JPEG
-              onChange={handleFirmaChange} // Maneja el cambio de la imagen de firma
-            />
-          </div>
-          <img
-            src={firmaPersonalizada || firmaPredeterminada}
-            alt="Firma personalizada"
-            onLoad={generatePDF}
-            style={{
-              maxWidth: "200px", // Establece el ancho máximo deseado
-              height: "auto", // Permite que la altura se ajuste automáticamente
-              marginTop: "10px" // Espaciado superior opcional
-            }}
-          />
+          <label htmlFor="firma">Firma personalizada:</label>
+        <input
+          type="file"
+          id="firma"
+          name="firma"
+          accept=".png, .jpg, .jpeg" // Acepta archivos PNG, JPG y JPEG
+          onChange={handleFirmaChange} // Maneja el cambio de la imagen de firma
+        />
+      </div>
+      <img
+  src={firmaPersonalizada || firmaPredeterminada}
+  alt="Firma personalizada"
+  onLoad={generatePDF}
+  style={{
+    maxWidth: "200px", // Establece el ancho máximo deseado
+    maxHeight: "200px", // Establece el ancho máximo deseado
+    height: "auto", // Permite que la altura se ajuste automáticamente
+    marginTop: "10px" // Espaciado superior opcional
+  }}
+/>
+
+
         </form>
         <div>
   <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
