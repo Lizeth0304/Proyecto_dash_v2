@@ -14,19 +14,40 @@ function Modificar() {
     setSelectedFile(file);
   };
 
-  const handleUpload = async () => {
-    if (!selectedFile) {
+  const handleUpload2 = async (processedFile) => {
+    if (!processedFile) {
       alert('Selecciona un archivo PDF primero');
       return;
     }
 
     try {
-      const pdfBytes = await agregarTextoAlPDF(selectedFile, fecha);
+      const pdfBytes = await agregarTextoAlPDF(processedFile, fecha);
       descargarPDF(pdfBytes);
     } catch (error) {
       console.error('Error al modificar el PDF:', error);
     }
   };
+
+  const handleUpload = () => {
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append('pdf_file', selectedFile);
+  
+      fetch('http://localhost:5000//procesar-pdf', {
+        method: 'POST',
+        body: formData,
+      })
+        .then((response) => response.blob())
+        .then((blob) => {
+          // Llama a handleUpload2 con el archivo procesado
+          handleUpload2(blob);
+        })
+        .catch((error) => {
+          console.error('Error al procesar el PDF:', error);
+        });
+    }
+  };
+  
 
   const calcularCoordenadas = (page, selloFechaWidth, selloFechaHeight, selloFolioWidth, selloFolioHeight, pageCount, pageIndex) => {
     const { width, height } = page.getSize();
@@ -133,24 +154,44 @@ function Modificar() {
   };
 
   const descargarPDF = (pdfBytes) => {
+    const nombreArchivoOriginal = selectedFile.name; // Obtiene el nombre del archivo original
+    const nombreArchivoFoliado = nombreArchivoOriginal.replace('.pdf', '-Foliado.pdf'); // Agrega "_foliado" al nombre
+    
     const blob = new Blob([pdfBytes], { type: 'application/pdf' });
     const urlBlob = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = urlBlob;
-    a.download = 'pdf_con_texto.pdf';
+    a.download = nombreArchivoFoliado; // Asigna el nombre modificado
     a.click();
   };
 
   return (
+    
     <div>
-      <h1 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Editor de PDF</h1>
-      <input type="file" accept=".pdf" onChange={handleFileChange} />
-      <div>
-        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha: </label>
-        <DatePicker type='date' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" selected={fecha} onChange={(date) => setFecha(date)} />
+      <div className="grid gap-6 mb-6">
+      <h1 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">MODIFICAR PDF</h1>
+      <div className="flex items-center" >
+      <label className="block mr-4 mb-25 text-sm font-medium text-gray-900 dark:text-white">Archivo: </label>
+      <input className="mb-25 cursor-pointer bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg mr-2"
+       type="file" accept=".pdf" onChange={handleFileChange} /></div>
+       </div>
+       <div className="flex items-center" >
+        <label className="mr-7 block mb-20 text-sm font-medium text-gray-900 dark:text-white">Fecha: </label>
+          <DatePicker
+          dateFormat="dd/MM/yyyy"
+          className="mb-20 cursor-pointer bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg mr-2"
+          selected={fecha}
+          onChange={(date) => setFecha(date)}
+          required
+          />
+
       </div>
+      <button className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-20" 
+        onClick={handleUpload}>Modificar </button>
       <br></br>
-      <button className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"onClick={handleUpload}>Subir y Modificar PDF</button>
+
+        
+
     </div>
   );
 }

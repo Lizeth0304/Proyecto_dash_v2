@@ -63,6 +63,7 @@ function Tramite() {
             {botones === "ModeloA" && <ModeloA />}
             {botones === "ModeloB" && <ModeloB />}
             {botones === "Modificar" && <Modificar />}
+            
           </div>
         </div>        
       </div>
