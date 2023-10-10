@@ -1564,8 +1564,12 @@ resetFormValues();
     console.log(pdfFile)
   };
 
-  useEffect(() => {
+  const generatePreviewPDF = () => {
     generatePDF();
+  };
+
+  useEffect(() => {
+    //generatePDF();
         // Intenta obtener la firma personalizada desde el almacenamiento local
   const storedFirmaPersonalizada = localStorage.getItem("firmaPersonalizada");
   if (storedFirmaPersonalizada) {
@@ -2285,6 +2289,14 @@ resetFormValues();
     marginTop: "10px" // Espaciado superior opcional
   }}
 />
+<br></br>
+<button
+  type="button"
+  onClick={generatePreviewPDF}
+  className="text-white bg-gradient-to-br from-gray-800 to-gray-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+>
+  Mostrar Cambios
+</button>
 
 
         </form>
@@ -2388,7 +2400,7 @@ resetFormValues();
         <button
           type="submit"
           onClick={handleGeneratePDF}
-          className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+          className="text-white bg-gradient-to-br from-gray-800 to-gray-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
         >
           Generar Hoja de Envío
         </button>
