@@ -48,6 +48,19 @@ function Modificar() {
     }
   };
   
+  const handleUpload3 = async () => {
+    if (!selectedFile) {
+      alert('Selecciona un archivo PDF primero');
+      return;
+    }
+
+    try {
+      const pdfBytes = await agregarTextoAlPDF(selectedFile, fecha);
+      descargarPDF(pdfBytes);
+    } catch (error) {
+      console.error('Error al modificar el PDF:', error);
+    }
+  };
 
   const calcularCoordenadas = (page, selloFechaWidth, selloFechaHeight, selloFolioWidth, selloFolioHeight, pageCount, pageIndex) => {
     const { width, height } = page.getSize();
@@ -166,10 +179,31 @@ function Modificar() {
   };
 
   return (
-    
     <div>
       <div className="grid gap-6 mb-6">
       <h1 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">MODIFICAR PDF</h1>
+      <div className="flex items-center" >
+      <label className="block mr-4 mb-25 text-sm font-medium text-gray-900 dark:text-white">Archivo: </label>
+      <input className="mb-25 cursor-pointer bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg mr-2"
+       type="file" accept=".pdf" onChange={handleFileChange} /></div>
+       </div>
+       <div className="flex items-center" >
+        <label className="mr-7 block mb-20 text-sm font-medium text-gray-900 dark:text-white">Fecha: </label>
+          <DatePicker
+          dateFormat="dd/MM/yyyy"
+          className="mb-20 cursor-pointer bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg mr-2"
+          selected={fecha}
+          onChange={(date) => setFecha(date)}
+          required
+          />
+
+      </div>
+      <button className="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-20" 
+        onClick={handleUpload3}>Modificar </button>
+      <br></br>
+    <div>
+      <div className="grid gap-6 mb-6">
+      <h1 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">MODIFICAR PDF CON ESCANEADOS</h1>
       <div className="flex items-center" >
       <label className="block mr-4 mb-25 text-sm font-medium text-gray-900 dark:text-white">Archivo: </label>
       <input className="mb-25 cursor-pointer bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg mr-2"
@@ -192,6 +226,7 @@ function Modificar() {
 
         
 
+    </div>
     </div>
   );
 }
