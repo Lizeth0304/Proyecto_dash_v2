@@ -412,7 +412,7 @@ for (let i = 0; i < numLinesAsunto; i++) {
 
     doc.setFontSize(12);
     doc.setFont("times", "normal");
-    doc.text(`${formValues.diga ? "(X)" : "(   )"}  DIGA`, 20, paseAY+25);
+    doc.text(`${formValues.diga ? "(X)" : "(   )"}  Dirección General de Administración`, 20, paseAY+25);
 
     doc.setFontSize(12);
     doc.setFont("times", "normal");
@@ -1065,7 +1065,7 @@ doc.text(
 
 doc.setFontSize(12);
 doc.setFont("times", "normal");
-doc.text(`${formValues.diga ? "(X)" : "(   )"}  DIGA`, 20, paseAY+25);
+doc.text(`${formValues.diga ? "(X)" : "(   )"}  Dirección General de Administración`, 20, paseAY+25);
 
 doc.setFontSize(12);
 doc.setFont("times", "normal");
@@ -1803,7 +1803,7 @@ resetFormValues();
                       for="laravel-checkbox"
                       className="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                     >
-                      DIGA
+                      Dirección General de Administración
                     </label>
                   </div>
                 </li>
@@ -1837,26 +1837,36 @@ resetFormValues();
                 />
                 <label
                   htmlFor="ciencias2"
-                  className="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  className="w-20 py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                 >
                   Facultad
                 </label>
+                <input
+                      type="text"
+                      id="ciencias2"
+                      name="ciencias2"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block text-sm w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Facultad"
+                      value={formValues.ciencias2}
+                      onChange={handleInputChange}
+                      
+                    />
                 <select
                   id="ciencias2"
                   name="ciencias2"
                   value={formValues.ciencias2}
                   onChange={handleInputChange}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-5 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required
                 >
                   <option value="">Selecciona una facultad</option>
-                  <option value=" de Agropecuaria y Nutrición"> de Agropecuaria y Nutrición</option>
-                  <option value=" de Ciencias"> de Ciencias</option>
-                  <option value=" de Ciencias Empresariales"> de Ciencias Empresariales</option>
-                  <option value=" de Ciencias Sociales y Humanidades"> de Ciencias Sociales y Humanidades</option>
-                  <option value=" de Educación Inicial"> de Educación Inicial</option>
-                  <option value=" de Pedagogía y Cultura Física"> de Pedagogía y Cultura Física</option>
-                  <option value=" de Tecnología"> de Tecnología</option>
+                  <option value="de Agropecuaria y Nutrición"> de Agropecuaria y Nutrición</option>
+                  <option value="de Ciencias"> de Ciencias</option>
+                  <option value="de Ciencias Empresariales"> de Ciencias Empresariales</option>
+                  <option value="de Ciencias Sociales y Humanidades"> de Ciencias Sociales y Humanidades</option>
+                  <option value="de Educación Inicial"> de Educación Inicial</option>
+                  <option value="de Pedagogía y Cultura Física"> de Pedagogía y Cultura Física</option>
+                  <option value="de Tecnología"> de Tecnología</option>
                   {/* Agrega más opciones según sea necesario */}
                 </select>
 
@@ -1886,20 +1896,35 @@ resetFormValues();
                     />
                     <label
                       for="laravel-checkbox"
-                      className="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                      className="w-20 py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                     >
                       Dirección
                     </label>
                     <input
                       type="text"
-                      id="dirección2"
+                      id="direccion2"
                       name="direccion2"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="Nombre Dirección"
+                      placeholder="Dirección"
                       value={formValues.direccion2}
                       onChange={handleInputChange}
-                      required
+                      
                     />
+                    <select
+                  id="direccion2"
+                  name="direccion2"
+                  value={formValues.direccion2}
+                  onChange={handleInputChange}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-5 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  required
+                >
+                  <option value="">Selecciona una dirección</option>
+                  <option value="de Extensión Cultural y Proyección Social"> de Extensión Cultural y Proyección Social</option>
+                  <option value="de Registro"> de Registro</option>
+                  <option value="de Prácticas Preprofesionales"> de Prácticas Preprofesionales</option>
+                  {/* Agrega más opciones según sea necesario */}
+                </select>
+
                   </div>
                 </li>
                 <li className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
@@ -1914,7 +1939,7 @@ resetFormValues();
                     />
                     <label
                       for="laravel-checkbox"
-                      className="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                      className="w-20 py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                     >
                       Oficina
                     </label>
@@ -1923,11 +1948,72 @@ resetFormValues();
                       id="oficina2"
                       name="oficina2"
                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="Nombre de Oficina"
+                      placeholder="Oficina"
                       value={formValues.oficina2}
                       onChange={handleInputChange}
-                      required
+                      
                     />
+                <select
+                  id="oficina2"
+                  name="oficina2"
+                  value={formValues.oficina2}
+                  onChange={handleInputChange}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-5 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  required
+                >
+                  <option value="">Selecciona una oficina</option>
+                  <option value="de Admisión">Admisión</option>
+                  <option value="de Asesoría Legal">Asesoría Legal</option>
+                  <option value="de Bienestar Universitario">Bienestar Universitario</option>
+                  <option value="de Calidad Académica y Acreditación">Calidad Académica y Acreditación</option>
+                  <option value="de Contabilidad y Tesorería">Contabilidad y Tesorería</option>
+                  <option value="de Cooperación Nacional e Internacional">Cooperación Nacional e Internacional</option>
+                  <option value="de Defensoría Universitaria">Defensoría Universitaria</option>
+                  <option value="de Ejecutora de Inversiones">Ejecutora de Inversiones</option>
+                  <option value="de Grados y Títulos">Grados y Títulos</option>
+                  <option value="de Imagen Institucional">Imagen Institucional</option>
+                  <option value="de Oficina de Abastecimiento">Oficina de Abastecimiento</option>
+                  <option value="de Planeamiento Estratégico y Presupuesto">Planeamiento Estratégico y Presupuesto</option>
+                  <option value="de Programación Académica">Programación Académica</option>
+                  <option value="de Promoción del Empleo y Seguimiento del Egresado">Promoción del Empleo y Seguimiento del Egresado</option>
+                  <option value="de Recursos Humanos">Recursos Humanos</option>
+                  <option value="de Servicios Académicos">Servicios Académicos</option>
+                  <option value="de Servicios Generales">Servicios Generales</option>
+                  <option value="de Tecnologías de la Información">Tecnologías de la Información</option>
+                  <option value="de Unidad de Almacén y Distribución">Unidad de Almacén y Distribución</option>
+                  <option value="de Unidad de Análisis y Desarrollo de Sistemas">Unidad de Análisis y Desarrollo de Sistemas</option>
+                  <option value="de Unidad de Archivo Institucional">Unidad de Archivo Institucional</option>
+                  <option value="de Unidad de Compensaciones y Pensión">Unidad de Compensaciones y Pensión</option>
+                  <option value="de Unidad de Compras y Contratos">Unidad de Compras y Contratos</option>
+                  <option value="de Unidad de Contabilidad">Unidad de Contabilidad</option>
+                  <option value="de Unidad de Control Patrimonial">Unidad de Control Patrimonial</option>
+                  <option value="de Unidad de Deportes y Recreación">Unidad de Deportes y Recreación</option>
+                  <option value="de Unidad de Desarrollo y Rendimiento">Unidad de Desarrollo y Rendimiento</option>
+                  <option value="de Unidad de Gestión de la Calidad Académica">Unidad de Gestión de la Calidad Académica</option>
+                  <option value="de Unidad de Gestión de la Calidad Administrativa">Unidad de Gestión de la Calidad Administrativa</option>
+                  <option value="de Unidad de Gestión del Empleo y Relaciones Humanas">Unidad de Gestión del Empleo y Relaciones Humanas</option>
+                  <option value="de Unidad de Mantenimiento">Unidad de Mantenimiento</option>
+                  <option value="de Unidad de Organización y Procesos">Unidad de Organización y Procesos</option>
+                  <option value="de Unidad de Planeamiento">Unidad de Planeamiento</option>
+                  <option value="de Unidad de Presupuesto">Unidad de Presupuesto</option>
+                  <option value="de Unidad de Programación">Unidad de Programación</option>
+                  <option value="de Unidad de Redes y Comunicaciones">Unidad de Redes y Comunicaciones</option>
+                  <option value="de Unidad de Salud">Unidad de Salud</option>
+                  <option value="de Unidad de Secretaría General">Unidad de Secretaría General</option>
+                  <option value="de Unidad de Servicios">Unidad de Servicios</option>
+                  <option value="de Unidad de Servicios Alimentarios">Unidad de Servicios Alimentarios</option>
+                  <option value="de Unidad de Servicios Psicológicos">Unidad de Servicios Psicológicos</option>
+                  <option value="de Unidad de Soporte Técnico">Unidad de Soporte Técnico</option>
+                  <option value="de Unidad de Tesorería">Unidad de Tesorería</option>
+                  <option value="de Unidad de Trabajo Social">Unidad de Trabajo Social</option>
+                  <option value="de Unidad de Trámite Documentario">Unidad de Trámite Documentario</option>
+                  <option value="de Unidad de Transportes">Unidad de Transportes</option>
+                  <option value="de Unidad Formuladora">Unidad Formuladora</option>
+                  <option value="de Centro de Idiomas">Centro de Idiomas</option>
+                  <option value="de Centro Preuniversitario">Centro Preuniversitario</option>
+
+                </select>
+
                   </div>
                 </li>
                 <li className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
@@ -1972,7 +2058,7 @@ resetFormValues();
                       for="laravel-checkbox"
                       className="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                     >
-                      cc
+                      CC
                     </label>
                     <input
                       type="text"
@@ -2000,7 +2086,7 @@ resetFormValues();
                       for="laravel-checkbox"
                       className="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                     >
-                      cc2
+                      CC2
                     </label>
                     <input
                       type="text"
@@ -2027,7 +2113,7 @@ resetFormValues();
                       for="laravel-checkbox"
                       className="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                     >
-                      cc3
+                      CC3
                     </label>
                     <input
                       type="text"
