@@ -304,15 +304,20 @@ for (let i = 0; i < numLinesDoc; i++) {
 
     if (formValues.expediente) {
       // El campo "expediente" no está vacío, agregar "N° EXP." antes del valor
-      const expedienteText = `N° EXP. ${formValues.expediente}`;
+      const expedienteText = `N° EXP:`;
+      const expedienteText2 = `${formValues.expediente}`;
+
       doc.setFontSize(12);
       doc.setFont("times", "normal");
       if (docHeight > 5) {
         // El campo "Documento" ocupó más de una línea, colocar "expediente" debajo
-        doc.text(expedienteText, 53, docY + 4);
+        doc.text(expedienteText, 20, docY + 4);
+        doc.text(expedienteText2, 53, docY + 4);
       } else {
         // El campo "Documento" ocupó solo una línea, colocar "expediente" en su posición original
-        doc.text(expedienteText, 53, 85);
+        doc.text(expedienteText, 20, 85);
+        doc.text(expedienteText2, 53, docY + 4);
+
       }
     } else {
       // El campo "expediente" está vacío, no es necesario mostrar nada
@@ -994,20 +999,26 @@ docZ += 5;
  }*/
 
  if (formValues.expediente) {
-   // El campo "expediente" no está vacío, agregar "N° EXP." antes del valor
-   const expedienteText = `N° EXP. ${formValues.expediente}`;
-   doc.setFontSize(12);
-   doc.setFont("times", "normal");
-   if (docHeight > 5) {
-     // El campo "Documento" ocupó más de una línea, colocar "expediente" debajo
-     doc.text(expedienteText, 53, docY + 4);
-   } else {
-     // El campo "Documento" ocupó solo una línea, colocar "expediente" en su posición original
-     doc.text(expedienteText, 53, 85);
-   }
- } else {
-   // El campo "expediente" está vacío, no es necesario mostrar nada
- }
+  // El campo "expediente" no está vacío, agregar "N° EXP." antes del valor
+  const expedienteText = `N° EXP:`;
+  const expedienteText2 = `${formValues.expediente}`;
+
+  doc.setFontSize(12);
+  doc.setFont("times", "normal");
+  if (docHeight > 5) {
+    // El campo "Documento" ocupó más de una línea, colocar "expediente" debajo
+    doc.text(expedienteText, 20, docY + 4);
+    doc.text(expedienteText2, 53, docY + 4);
+  } else {
+    // El campo "Documento" ocupó solo una línea, colocar "expediente" en su posición original
+    doc.text(expedienteText, 20, 85);
+    doc.text(expedienteText2, 53, docY + 4);
+
+  }
+} else {
+  // El campo "expediente" está vacío, no es necesario mostrar nada
+}
+
  
 
 // Añadir el campo "REMITIDO POR" en el PDF
