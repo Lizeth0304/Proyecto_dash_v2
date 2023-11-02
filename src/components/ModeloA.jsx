@@ -315,7 +315,7 @@ for (let i = 0; i < numLinesDoc; i++) {
         doc.text(expedienteText2, 53, docY + 4);
       } else {
         // El campo "Documento" ocupó solo una línea, colocar "expediente" en su posición original
-        doc.text(expedienteText, 20, 85);
+        doc.text(expedienteText, 20, docY + 4);
         doc.text(expedienteText2, 53, docY + 4);
 
       }
