@@ -1,6 +1,7 @@
 import ModeloA from "../../components/ModeloA";
 import ModeloB from "../../components/ModeloB";
 import Modificar from "../../components/Modificar";
+import ModificarP from "../../components/ModificarP";
 import { useState } from "react";
 import { RiArticleLine, RiArticleFill, RiDraftLine } from "react-icons/ri";
 
@@ -56,14 +57,26 @@ function Tramite() {
                 onClick={() => handleBotonesChange("Modificar")}
               >
                 <RiDraftLine className="mr-2"/>
-                Modificar
+                Modificar Foliado
+              </button>
+              <button
+                type="button"
+                className={`inline-flex items-center px-4 py-2 text-sm font-medium ${
+                  botones === "ModificarP"
+                    ? "text-blue-700 bg-gray-100"
+                    : "text-gray-900 bg-white hover:bg-gray-100"
+                }`}
+                onClick={() => handleBotonesChange("ModificarP")}
+              >
+                <RiDraftLine className="mr-2"/>
+                Modificar Proveido
               </button>
             </div>
 
             {botones === "ModeloA" && <ModeloA />}
             {botones === "ModeloB" && <ModeloB />}
             {botones === "Modificar" && <Modificar />}
-            
+            {botones === "ModificarP" && <ModificarP />}
           </div>
         </div>        
       </div>
